@@ -1,0 +1,1 @@
+For details about the project just read the 'exercise_description.pdf' in doc/exercise_description.pdf
