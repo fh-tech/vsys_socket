@@ -40,6 +40,8 @@ build/*
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
 
 # Generated files
 .idea/**/contentModel.xml

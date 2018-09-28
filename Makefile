@@ -14,5 +14,4 @@ clean:
 	cd src/client && make clean
 	cd src/shared && make clean
 
-
 .PHONY: server client lib
