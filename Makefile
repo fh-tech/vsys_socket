@@ -1,4 +1,4 @@
-all: server client lib
+all: lib server client
 
 server:
 	cd src/server && make
@@ -14,4 +14,4 @@ clean:
 	cd src/client && make clean
 	cd src/shared && make clean
 
-.PHONY: server client lib
+.PHONY: lib

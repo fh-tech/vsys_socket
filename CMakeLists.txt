@@ -18,7 +18,7 @@ enable_testing()
 
 ############# Library #############
 add_library(socket-lib
-        src/shared/socket.cpp)
+        src/shared/Serversocket.cpp)
 
 add_executable(library-tests
         src/shared/include/include.h
@@ -41,7 +41,8 @@ target_link_libraries(server-tests gtest)
 
 ############# Client #############
 add_executable(client
-        src/client/main.cpp test/shared/test_library.cpp src/shared/socket.cpp src/shared/socket.h)
+        src/client/main.cpp
+        src/shared/Serversocket.cpp)
 target_link_libraries(client socket-lib)
 
 add_executable(client-tests
