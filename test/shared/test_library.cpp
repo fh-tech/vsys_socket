@@ -5,8 +5,9 @@
 #include <gtest/gtest.h>
 #include "../../src/shared/include/include.h"
 
-int main() {
-    RUN_ALL_TESTS();
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
 TEST(test_library, test_gtest) {

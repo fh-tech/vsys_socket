@@ -6,8 +6,9 @@
 #include "../../src/client/include/include.h"
 
 
-int main() {
-    RUN_ALL_TESTS();
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
 TEST(test_client, test_gtest) {

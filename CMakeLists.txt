@@ -41,7 +41,7 @@ target_link_libraries(server-tests gtest)
 
 ############# Client #############
 add_executable(client
-        src/client/main.cpp test/shared/test_library.cpp)
+        src/client/main.cpp test/shared/test_library.cpp src/shared/socket.cpp src/shared/socket.h)
 target_link_libraries(client socket-lib)
 
 add_executable(client-tests
@@ -49,8 +49,5 @@ add_executable(client-tests
         test/client/test_client.cpp)
 
 target_link_libraries(client-tests gtest)
-############
-
-
-
+#############
 
