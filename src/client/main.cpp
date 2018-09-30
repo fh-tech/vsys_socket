@@ -4,8 +4,11 @@
 
 
 #include <iostream>
+#include "../shared/Clientsocket.h"
 
 int main() {
-    std::cout << "i am the client" << std::endl;
+    ClientSocket csocket = ClientSocket();
+    Socket s = csocket.connect_to(10025, "0.0.0.0");
+    std::cout << s.receive() << std::endl;
     return 0;
 }

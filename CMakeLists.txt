@@ -21,7 +21,7 @@ add_library(socket-lib
         src/shared/Serversocket.cpp)
 
 add_executable(library-tests
-        src/shared/include/include.h
+        src/shared/Serversocket.cpp
         test/shared/test_library.cpp)
 
 target_link_libraries(library-tests gtest)
@@ -29,7 +29,10 @@ target_link_libraries(library-tests gtest)
 
 ############# Server #############
 add_executable(server
-        src/server/main.cpp)
+        src/server/main.cpp
+        src/shared/Serversocket.cpp
+        src/shared/Socket.cpp)
+
 target_link_libraries(server socket-lib)
 
 add_executable(server-tests
@@ -42,7 +45,7 @@ target_link_libraries(server-tests gtest)
 ############# Client #############
 add_executable(client
         src/client/main.cpp
-        src/shared/Serversocket.cpp)
+        src/shared/Serversocket.cpp src/shared/Socket.cpp src/shared/Socket.h src/shared/Clientsocket.cpp src/shared/Clientsocket.h)
 target_link_libraries(client socket-lib)
 
 add_executable(client-tests

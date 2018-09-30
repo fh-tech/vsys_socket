@@ -3,7 +3,6 @@
 //
 
 #include <gtest/gtest.h>
-#include <linux/in.h>
 #include "../../src/shared/include/include.h"
 
 int main(int argc, char **argv) {
@@ -11,7 +10,10 @@ int main(int argc, char **argv) {
     return RUN_ALL_TESTS();
 }
 
-TEST(test_library, test_gtest) {
-    const char * ip = "127.0.0.1";
-    Serversocket ssocket(ip, 25);
+TEST(test_serversocket, test_construct_1) {
+
+}
+
+TEST(test_serversocket, test_construct_2) {
+
 }
