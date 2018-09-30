@@ -3,7 +3,6 @@
 //
 
 #include <gtest/gtest.h>
-#include "../../src/client/include/include.h"
 
 
 int main(int argc, char **argv) {
@@ -12,6 +11,4 @@ int main(int argc, char **argv) {
 }
 
 TEST(test_client, test_gtest) {
-    int i = 10;
-    ASSERT_TRUE(i < 200);
 }

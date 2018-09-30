@@ -6,5 +6,7 @@
 #define VSYS_SOCKET_INCLUDE_H
 
 #include "../Serversocket.h"
+#include "../Clientsocket.h"
+#include "../Socket.h"
 
 #endif //VSYS_SOCKET_INCLUDE_H

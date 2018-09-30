@@ -3,8 +3,7 @@
 //
 
 
-#include <iostream>
-#include "../shared/Clientsocket.h"
+#include "../shared/include/include.h"
 
 int main() {
     ClientSocket csocket = ClientSocket();

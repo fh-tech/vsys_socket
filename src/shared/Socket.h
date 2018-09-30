@@ -6,15 +6,8 @@
 #define VSYS_SOCKET_SOCKET_H
 
 #include <iostream>
-#include <cstdlib>
-#include <sys/types.h>
-#include <sys/socket.h> // socket(), bind(), ...
-#include <netinet/in.h> // struct sockaddr_in
-#include <arpa/inet.h> // inet_ntoa(), ...
-#include <unistd.h> // read(), write(), close()
-#include <cerrno> // global var errno
-#include <cstdio>
-#include <cstdlib>
+#include <sys/socket.h>
+#include <unistd.h>
 #include <cstring>
 
 class Socket {

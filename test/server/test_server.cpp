@@ -3,7 +3,6 @@
 //
 
 #include <gtest/gtest.h>
-#include "../../src/server/include/include.h"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -11,6 +10,5 @@ int main(int argc, char **argv) {
 }
 
 TEST(test_server, test_gtest) {
-    int i = 10;
-    ASSERT_TRUE(i < 200);
+
 }
