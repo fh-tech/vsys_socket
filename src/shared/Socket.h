@@ -15,9 +15,11 @@ public:
     explicit Socket(int sockfd);
     ~Socket();
     void send_msg(std::string message);
-    std::string receive();
+
+    std::string receive() const;
 
 private:
+    std::string receive_helper() const;
     int sockfd;
 };
 

@@ -10,5 +10,10 @@ int main() {
     Socket s = ssocket.listen_accept();
     std::string message = "Welcome to your mail server";
     s.send_msg(message);
+    sleep(1);
+    std::cout << s.receive() << std::endl;
+
+
+
     return 0;
 }

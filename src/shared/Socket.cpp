@@ -17,20 +17,28 @@ void Socket::send_msg(std::string message) {
     send(sockfd, buffer, strlen(buffer), 0);
 }
 
-std::string Socket::receive() {
-    char buffer[1024];
+std::string Socket::receive() const {
+    std::string compMessage;
+    std::string newPart = receive_helper();
+    int i = 0;
+    while(!newPart.empty()) {
+        std::cout << i++ << std::endl;
+        compMessage += newPart;
+        newPart = receive_helper();
+    }
+    return compMessage;
+}
+
+std::string Socket::receive_helper() const {
+    char buffer[10];
     // should be blocking i guess
-    ssize_t size = recv(sockfd, buffer, 1023, 0);
+    ssize_t size = recv(sockfd, buffer, 9, MSG_WAITALL);
     if(size > 0) {
         buffer[size] = '\0';
-        std::cout << "Message received" << std::endl;
         return std::string(buffer);
-    } else if(size == 0) {
-        std::cout << "Client closed remote socket" << std::endl;
-        //TODO: should we quit here?
-        exit(1);
     } else {
-        perror("recv error");
-        exit(1);
+        return "";
     }
 }
+
+
