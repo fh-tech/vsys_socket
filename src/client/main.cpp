@@ -12,7 +12,5 @@ int main() {
     std::string longMessage = "This message has to be sent over multiple messages i am sure about that that must at least be read over alot of messages if i read 10chars at once";
     s.send_msg(longMessage);
 
-
-
     return 0;
 }

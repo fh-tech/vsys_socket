@@ -10,16 +10,16 @@ Socket::~Socket() {
     close(sockfd);
 }
 
-void Socket::send_msg(std::string message) {
-    send(sockfd, message.c_str(), message.length() + 1, 0);
+// returns - 1 on failure and on success number of characters sent
+ssize_t Socket::send_msg(std::string message) {
+    // with 0 flag equivalent to write()
+    return send(sockfd, message.c_str(), message.length() + 1, 0);
 }
 
 std::string Socket::receive() const {
     std::string compMessage;
     std::string newPart = receive_helper();
-    int i = 0;
     while(!newPart.empty()) {
-        std::cout << i++ << std::endl;
         compMessage += newPart;
         newPart = receive_helper();
     }

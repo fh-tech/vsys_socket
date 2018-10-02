@@ -14,7 +14,7 @@ class Socket {
 public:
     explicit Socket(int sockfd);
     ~Socket();
-    void send_msg(std::string message);
+    ssize_t send_msg(std::string message);
 
     std::string receive() const;
 

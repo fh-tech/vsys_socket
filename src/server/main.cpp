@@ -15,6 +15,6 @@ int main() {
         sleep(1);
         std::cout << s.receive() << std::endl;
     }
-    
+
     return 0;
 }
