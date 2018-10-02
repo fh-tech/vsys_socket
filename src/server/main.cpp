@@ -7,13 +7,14 @@
 
 int main() {
     Serversocket ssocket = Serversocket("0.0.0.0", 10025, 5);
-    Socket s = ssocket.listen_accept();
-    std::string message = "Welcome to your mail server";
-    s.send_msg(message);
-    sleep(1);
-    std::cout << s.receive() << std::endl;
 
+    while(Socket s = ssocket.listen_accept()){
 
-
+        std::string message = "Welcome to your mail server";
+        s.send_msg(message);
+        sleep(1);
+        std::cout << s.receive() << std::endl;
+    }
+    
     return 0;
 }

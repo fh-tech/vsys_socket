@@ -18,6 +18,8 @@ public:
 
     std::string receive() const;
 
+    operator bool(){ return sockfd > 0;}
+
 private:
     std::string receive_helper() const;
     int sockfd;

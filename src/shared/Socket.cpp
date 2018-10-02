@@ -11,10 +11,7 @@ Socket::~Socket() {
 }
 
 void Socket::send_msg(std::string message) {
-    char buffer[message.length() + 1];
-    strcpy(buffer, message.c_str());
-    buffer[message.length()] = '\0';
-    send(sockfd, buffer, strlen(buffer), 0);
+    send(sockfd, message.c_str(), message.length() + 1, 0);
 }
 
 std::string Socket::receive() const {
@@ -32,7 +29,7 @@ std::string Socket::receive() const {
 std::string Socket::receive_helper() const {
     char buffer[10];
     // should be blocking i guess
-    ssize_t size = recv(sockfd, buffer, 9, MSG_WAITALL);
+    ssize_t size = recv(sockfd, buffer, 9, 0);
     if(size > 0) {
         buffer[size] = '\0';
         return std::string(buffer);

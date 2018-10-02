@@ -41,13 +41,11 @@ Socket Serversocket::listen_accept() const {
     int cli_sockfd = -1;
     bool connected = false;
 
-    while (!connected) {
-        std::cout << "Waiting for connections..." << std::endl;
-        cli_sockfd = accept(sockfd, (struct sockaddr *) &cli_addr, (socklen_t *)&clilen);
-        if (cli_sockfd > 0) {
-            connected = true;
-            printf("Client connected from %s:%d...\n", inet_ntoa(cli_addr.sin_addr), ntohs(cli_addr.sin_port));
-        }
+    cli_sockfd = accept(sockfd, (struct sockaddr *) &cli_addr, (socklen_t *) &clilen);
+    if (cli_sockfd > 0) {
+        printf("Client connected from %s:%d...\n", inet_ntoa(cli_addr.sin_addr), ntohs(cli_addr.sin_port));
+    } else {
+        std::cout << "connection error" << std::endl;
     }
     return Socket(cli_sockfd);
 }
