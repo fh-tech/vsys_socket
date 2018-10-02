@@ -16,26 +16,16 @@ ssize_t Socket::send_msg(std::string message) {
     return send(sockfd, message.c_str(), message.length() + 1, 0);
 }
 
-std::string Socket::receive() const {
-    std::string compMessage;
-    std::string newPart = receive_helper();
-    while(!newPart.empty()) {
-        compMessage += newPart;
-        newPart = receive_helper();
+ssize_t Socket::receive(char *buf, size_t len) const {
+    ssize_t rSize;
+    if((rSize = recv(sockfd, buf, len, 0)) == -1) {
+        throw new std::runtime_error("failed to receive message");
+    } else {
+        return rSize;
     }
-    return compMessage;
 }
 
-std::string Socket::receive_helper() const {
-    char buffer[10];
-    // should be blocking i guess
-    ssize_t size = recv(sockfd, buffer, 9, 0);
-    if(size > 0) {
-        buffer[size] = '\0';
-        return std::string(buffer);
-    } else {
-        return "";
-    }
-}
+
+
 
 

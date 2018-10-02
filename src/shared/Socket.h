@@ -13,19 +13,18 @@
 class Socket {
 public:
     explicit Socket(int sockfd);
+
     ~Socket();
+
     ssize_t send_msg(std::string message);
 
-    std::string receive() const;
+    ssize_t receive(char *buf, size_t len) const;
 
-    operator bool(){ return sockfd > 0;}
+    operator bool() { return sockfd > 0; }
 
 private:
-    std::string receive_helper() const;
     int sockfd;
 };
-
-
 
 
 #endif //VSYS_SOCKET_SOCKET_H
