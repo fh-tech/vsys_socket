@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "../../src/shared/include/include.h"
+#include "../../../src/shared/socket/include/include.h"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

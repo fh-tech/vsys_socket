@@ -17,15 +17,29 @@ add_subdirectory(
         "${CMAKE_BINARY_DIR}/googletest-build")
 enable_testing()
 
-############# Library #############
+############# Libraries #############
+
+#### Socket-Lib ####
 add_library(socket-lib
-        src/shared/socket.cpp)
+        src/shared/socket/socket.cpp)
 
-add_executable(library-tests
-        src/shared/include/include.h
-        test/shared/test_library.cpp)
+add_executable(socket-tests
+        test/shared/socket/test_socket.cpp)
 
-target_link_libraries(library-tests gtest)
+target_link_libraries(socket-tests gtest)
+####
+
+#### Database ####
+add_library(database
+        src/shared/database/Database.cpp)
+
+add_executable(database-tests
+        test/shared/database/test_database.cpp)
+
+target_link_libraries(database-tests gtest)
+
+####
+
 ##############
 
 ############# Server #############
@@ -34,7 +48,6 @@ add_executable(server
 target_link_libraries(server socket-lib)
 
 add_executable(server-tests
-        src/server/include/include.h
         test/server/test_server.cpp)
 
 target_link_libraries(server-tests gtest)
@@ -42,11 +55,10 @@ target_link_libraries(server-tests gtest)
 
 ############# Client #############
 add_executable(client
-        src/client/main.cpp )
+        src/client/main.cpp)
 target_link_libraries(client socket-lib)
 
 add_executable(client-tests
-        src/client/include/include.h
         test/client/test_client.cpp)
 
 target_link_libraries(client-tests gtest)
