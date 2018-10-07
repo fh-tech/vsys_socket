@@ -7,4 +7,8 @@
 
 #include "../socket.h"
 
+#include "../protocol/ClientRequest.h"
+#include "../protocol/ClientRequestPrinter.h"
+#include "../protocol/ClientRequestVisitor.h"
+
 #endif //VSYS_SOCKET_INCLUDE_H

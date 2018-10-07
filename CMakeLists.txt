@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(vsys_socket)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
@@ -19,13 +19,18 @@ enable_testing()
 
 ############# Library #############
 add_library(socket-lib
-        src/shared/socket.cpp)
+        src/socket-lib/socket.cpp
+        src/socket-lib/protocol/ClientRequest.h
+        src/socket-lib/protocol/ClientRequestVisitor.h
+        src/socket-lib/protocol/ClientRequestPrinter.h
+        src/socket-lib/protocol/ClientRequestPrinter.cpp
+        src/socket-lib/protocol/ClientRequestParser.cpp src/socket-lib/protocol/ClientRequestParser.h)
+include_directories(src)
 
 add_executable(library-tests
-        src/shared/include/include.h
-        test/shared/test_library.cpp)
+        test/socket-lib/test_library.cpp)
 
-target_link_libraries(library-tests gtest)
+target_link_libraries(library-tests gtest socket-lib)
 ##############
 
 ############# Server #############
@@ -42,7 +47,7 @@ target_link_libraries(server-tests gtest)
 
 ############# Client #############
 add_executable(client
-        src/client/main.cpp )
+        src/client/main.cpp src/socket-lib/protocol/ClientRequestPrinter.cpp src/socket-lib/protocol/ClientRequestPrinter.h)
 target_link_libraries(client socket-lib)
 
 add_executable(client-tests
