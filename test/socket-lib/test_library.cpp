@@ -21,9 +21,12 @@ TEST(test_library, test_gtest) {
 TEST(client_request, print){
 
     ClientRequest client_rq = Login {"username", "password"};
+
     std::stringstream ss{};
     ClientRequestPrinter crp{ss};
+
     std::visit(crp, client_rq);
+
     ASSERT_EQ("LOGIN\nusername\npassword\n", ss.str());
 
 }
@@ -105,4 +108,19 @@ TEST(client_req_parser, quit){
     ASSERT_TRUE(std::holds_alternative<ClientRequest>(crq_result));
     auto crq = std::get<ClientRequest>(crq_result);
     ASSERT_TRUE(std::holds_alternative<Quit>(crq));
+}
+
+TEST(client_req_parser, send){
+    std::string client_req = "SEND\nhello_kitty\nHello World\nThis is a\n multiline message.\n\n.\n";
+    ClientRequestParser parser;
+    std::variant<ClientRequest, const char*> crq_result = parser.parse(client_req);
+    ASSERT_TRUE(std::holds_alternative<ClientRequest>(crq_result));
+    auto req = std::get<ClientRequest>(crq_result);
+    ASSERT_TRUE(std::holds_alternative<Send>(req));
+
+    auto send = std::get<Send>(req);
+    ASSERT_EQ("hello_kitty", send.to);
+    ASSERT_EQ("Hello World", send.subject);
+    ASSERT_EQ("This is a\n multiline message.\n", send.msg);
+
 }

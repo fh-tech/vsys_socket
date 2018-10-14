@@ -11,6 +11,13 @@ void ClientRequestPrinter::operator()(Login const &l) {
        << l.password << std::endl;
 }
 
+void ClientRequestPrinter::operator()(Send const &l) {
+    os << "SEND" << '\n'
+       <<  l.to << '\n'
+       << l.subject << '\n'
+       << l.msg << "\n." << std::endl;
+}
+
 void ClientRequestPrinter::operator()(List const &l) {
     os << "LIST" << std::endl;
 }

@@ -18,9 +18,16 @@ struct Read   { msg_id id; };
 
 struct Delete { msg_id id; };
 
+struct Send {
+    std::string to;
+    std::string subject;
+    std::string msg;
+};
+
+
 struct Quit {};
 
 
-using ClientRequest = std::variant<Login, List, Read, Delete, Quit>;
+using ClientRequest = std::variant<Login, Send, List, Read, Delete, Quit>;
 
 #endif //VSYS_SOCKET_CLIENTREQUEST_H

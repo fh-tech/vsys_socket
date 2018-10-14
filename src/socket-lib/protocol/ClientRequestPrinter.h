@@ -18,6 +18,8 @@ public:
 
     void operator()(Login const &l);
 
+    void operator()(Send const &l);
+
     void operator()(List const &l);
 
     void operator()(Read const &l);
