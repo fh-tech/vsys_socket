@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.12)
 project(vsys_socket)
 set(CMAKE_CXX_STANDARD 14)
 
+SET(CMAKE_CXX_FLAGS  ${CMAKE_CXX_FLAGS} "-std=c++14 -pthread -l sqlite3")
+find_package(Threads)
+
+
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
@@ -31,12 +35,12 @@ target_link_libraries(socket-tests gtest)
 
 #### Database ####
 add_library(database
-        src/shared/database/Database.cpp)
+        src/shared/database/Database.cpp src/shared/database/Message.h)
 
 add_executable(database-tests
         test/shared/database/test_database.cpp)
 
-target_link_libraries(database-tests gtest)
+target_link_libraries(database-tests database gtest)
 
 ####
 

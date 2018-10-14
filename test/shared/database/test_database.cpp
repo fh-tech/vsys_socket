@@ -11,6 +11,5 @@ int main(int argc, char **argv) {
 }
 
 TEST(test_database, test_gtest) {
-    int i = 10;
-    ASSERT_TRUE(i < 200);
+    Database db = Database();
 }
