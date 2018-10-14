@@ -61,18 +61,21 @@ void Database::save_msg(Message msg) {
         << "\');";
     std::string errMsg = "Failed to insert data. ";
     std::string successMsg = "Data inserted successfully.";
-    std::cout << sql.str() << std::endl;
     executeStatement(sql.str(), nullptr, nullptr, errMsg, successMsg);
 }
 
-void Database::delete_msg(uint16_t msg_id) {
+void Database::delete_msg(uint16_t mail_id) {
+    std::string sql = "DELETE FROM MAIL WHERE MAIL.mail_id = \'" + std::to_string(mail_id) +"\';";
+    std::string successMsg = "Deleting was successful. ";
+    std::string errMsg = "Delete failed. ";
+    executeStatement(sql, nullptr, nullptr, errMsg, successMsg);
 }
 
 /**
  * returns all msgs for uid
  */
 std::vector<Message> Database::getMsgFor(std::string uid) {
-    std::string sql = "SELECT * FROM MAIL WHERE MAIL.mail_id = " + uid + ";";
+    std::string sql = "SELECT * FROM MAIL WHERE MAIL.to_uid = \'" + uid + "\';";
     std::string successMsg = "Retrieving data was successful.";
     std::string errMsg = "Failed to retrieve data. ";
     std::vector<Message> result{};
@@ -87,7 +90,7 @@ void Database::executeStatement(std::string statement,
                                 std::string successMsg) {
     open_database();
     char *sqlError = nullptr;
-    if ((sqlite3_exec(db, statement.c_str(), callback, nullptr, &sqlError)) != SQLITE_OK) {
+    if ((sqlite3_exec(db, statement.c_str(), callback, result, &sqlError)) != SQLITE_OK) {
         std::stringstream ss(errorMsg);
         ss << sqlError;
         sqlite3_free(sqlError);
@@ -99,11 +102,14 @@ void Database::executeStatement(std::string statement,
 }
 
 int Database::getMsgCallback(void * msg, int argc, char **argv, char **azColName) {
-    int i;
-    for(i = 0; i < argc; i++) {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    if(argc == 5) {
+        Message m = Message(argv[1], argv[2], argv[3], argv[4]);
+        auto *msgs = (std::vector<Message> *)msg;
+        msgs->push_back(m);
+    } else {
+        std::cout << "Initializing object failed." << std::endl;
+        return 1;
     }
-    printf("\n");
     return 0;
 }
 
