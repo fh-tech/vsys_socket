@@ -16,6 +16,7 @@
 #include <utility>
 #include <sys/stat.h>
 #include "Message.h"
+#include <vector>
 
 class Database {
 public:
@@ -24,7 +25,7 @@ public:
     virtual ~Database();
     void save_msg(Message msg);
     void delete_msg(uint16_t msg_id);
-    void getMsgFor(std::string uid);
+    std::vector<Message> getMsgFor(std::string uid);
 
 private:
     sqlite3 *db;
@@ -32,8 +33,14 @@ private:
     std::string get_home() const;
     void create_tables();
     void open_database();
-    void executeStatement(std::string statement, std::string errMsg, std::string sucessMsg);
+    void executeStatement(std::string statement,
+            int(*callback)(void*, int, char**, char**),
+            void * result,
+            std::string errMsg,
+            std::string sucessMsg);
     inline bool db_exists() const;
+
+    static int getMsgCallback(void *, int, char**, char**);
 };
 
 #define VSYS_SOCKET_DATABASE_H
