@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 project(vsys_socket)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -24,7 +24,9 @@ add_library(socket-lib
         src/socket-lib/protocol/ClientRequestVisitor.h
         src/socket-lib/protocol/ClientRequestPrinter.h
         src/socket-lib/protocol/ClientRequestPrinter.cpp
-        src/socket-lib/protocol/ClientRequestParser.cpp src/socket-lib/protocol/ClientRequestParser.h)
+        src/socket-lib/protocol/ClientRequestParser.cpp
+        src/socket-lib/protocol/ClientRequestParser.h)
+
 include_directories(src)
 
 add_executable(library-tests
@@ -39,19 +41,17 @@ add_executable(server
 target_link_libraries(server socket-lib)
 
 add_executable(server-tests
-        src/server/include/include.h
         test/server/test_server.cpp)
 
 target_link_libraries(server-tests gtest)
 #############
 
 ############# Client #############
-add_executable(client
-        src/client/main.cpp src/socket-lib/protocol/ClientRequestPrinter.cpp src/socket-lib/protocol/ClientRequestPrinter.h)
+add_executable(client src/client/main.cpp)
+
 target_link_libraries(client socket-lib)
 
 add_executable(client-tests
-        src/client/include/include.h
         test/client/test_client.cpp)
 
 target_link_libraries(client-tests gtest)

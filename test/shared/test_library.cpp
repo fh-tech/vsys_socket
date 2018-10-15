@@ -3,12 +3,17 @@
 //
 
 #include <gtest/gtest.h>
+#include "../../src/shared/include/include.h"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
 
-TEST(test_server, test_gtest) {
+TEST(test_serversocket, test_construct_1) {
+
+}
+
+TEST(test_serversocket, test_construct_2) {
 
 }

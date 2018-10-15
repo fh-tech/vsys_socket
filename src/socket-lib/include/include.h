@@ -5,7 +5,9 @@
 #ifndef VSYS_SOCKET_INCLUDE_H
 #define VSYS_SOCKET_INCLUDE_H
 
-#include "../socket.h"
+#include "../Serversocket.h"
+#include "../Clientsocket.h"
+#include "../Socket.h"
 
 #include "../protocol/ClientRequest.h"
 #include "../protocol/ClientRequestPrinter.h"
