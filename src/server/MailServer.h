@@ -6,8 +6,10 @@
 #define VSYS_SOCKET_MAILSERVER_H
 
 #include <unordered_set>
-#include "socket-lib/include/include.h"
+
 #include "ClientConnection.h"
+#include "../shared/socket/Serversocket.h"
+
 
 class MailServer {
 private:

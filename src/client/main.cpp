@@ -4,7 +4,8 @@
 
 
 #include <sstream>
-#include "socket-lib/include/include.h"
+#include "../shared/socket/Clientsocket.h"
+#include "../shared/socket/Socket.h"
 
 int main() {
     char buf[256];

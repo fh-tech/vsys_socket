@@ -6,14 +6,15 @@
 #define VSYS_SOCKET_CLIENTCONNECTION_H
 
 
-#include <socket-lib/Socket.h>
 #include <atomic>
 #include <array>
 #include <variant>
-#include <socket-lib/protocol/ClientRequest.h>
 #include <thread>
-#include <socket-lib/protocol/ClientRequestPrinter.h>
-#include <socket-lib/protocol/ClientRequestParser.h>
+#include "../shared/socket/Socket.h"
+#include "../shared/protocol/ClientRequest.h"
+#include "../shared/protocol/ClientRequestParser.h"
+#include "../shared/protocol/ClientRequestPrinter.h"
+
 
 class ClientConnection {
 public:

@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(vsys_socket)
 set(CMAKE_CXX_STANDARD 17)
-SET(CMAKE_CXX_FLAGS -pthread)
+
+SET(CMAKE_CXX_FLAGS  ${CMAKE_CXX_FLAGS} "-pthread -l sqlite3")
+find_package(Threads)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
@@ -18,45 +20,67 @@ add_subdirectory(
         "${CMAKE_BINARY_DIR}/googletest-build")
 enable_testing()
 
-############# Library #############
-add_library(socket-lib
-        src/socket-lib/Socket.cpp
-        src/socket-lib/Clientsocket.cpp
-        src/socket-lib/Serversocket.cpp
-        src/socket-lib/protocol/ClientRequest.h
-        src/socket-lib/protocol/ClientRequestVisitor.h
-        src/socket-lib/protocol/ClientRequestPrinter.h
-        src/socket-lib/protocol/ClientRequestPrinter.cpp
-        src/socket-lib/protocol/ClientRequestParser.cpp
-        src/socket-lib/protocol/ClientRequestParser.h)
 
-include_directories(src)
+FILE(GLOB_RECURSE SOCKET_LIB_SRC src/shared/socket "*.cpp" "*.h")
+FILE(GLOB_RECURSE PROTO_LIB_SRC src/shared/protocol "*.cpp" "*.h")
 
-add_executable(library-tests
-        test/socket-lib/test_library.cpp)
+FILE(GLOB_RECURSE SERVER_SRC src/server "*.cpp" "*.h")
+FILE(GLOB_RECURSE CLIENT_SRC src/client "*.cpp" "*.h")
 
-target_link_libraries(library-tests gtest socket-lib)
-##############
 
-############# Server #############
-add_executable(server
-        src/server/main.cpp src/server/MailServer.cpp src/server/MailServer.h src/server/ClientConnection.cpp src/server/ClientConnection.h)
-target_link_libraries(server socket-lib)
+############# Libraries #############
 
-add_executable(server-tests
-        test/server/test_server.cpp)
+#### Socket - lib ####
 
+add_library(socket-lib STATIC ${SOCKET_LIB_SRC})
+
+add_executable(socket-tests
+        test/shared/socket/test_socket.cpp)
+
+target_link_libraries(socket-tests ${GTEST_BOTH_LIBRARIES})
+
+
+#### Protocol - lib ####
+
+add_library(protocol-lib STATIC ${PROTO_LIB_SRC})
+
+add_executable(protocol-tests
+        test/shared/protocol/test_protocol.cpp)
+
+target_link_libraries(protocol-tests ${GTEST_BOTH_LIBRARIES})
+
+
+############# Executables #############
+
+#### Server ####
+
+add_executable(server ${SERVER_SRC})
+
+target_include_directories(server INTERFACE
+        src/shared/protocol)
+target_include_directories(server INTERFACE
+        src/shared/socket)
+
+target_link_libraries(server socket-lib protocol-lib)
+
+add_executable(server-tests test/server/test_server.cpp)
 target_link_libraries(server-tests gtest)
-#############
 
-############# Client #############
-add_executable(client src/client/main.cpp)
+add_executable(database-tests test/server/database/test_database.cpp)
+target_link_libraries(database-tests gtest)
 
-target_link_libraries(client socket-lib)
 
-add_executable(client-tests
-        test/client/test_client.cpp)
 
+#### Client ####
+
+add_executable(client ${CLIENT_SRC})
+target_link_libraries(client socket-lib protocol-lib)
+
+add_executable(client-tests test/client/test_client.cpp)
 target_link_libraries(client-tests gtest)
-#############
+
+target_include_directories(client INTERFACE
+        src/shared/protocol)
+target_include_directories(client INTERFACE
+        src/shared/socket)
 
