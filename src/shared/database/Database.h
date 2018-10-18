@@ -20,16 +20,16 @@
 
 class Database {
 public:
-    explicit Database(std::string filename);
+    explicit Database(const char * filename);
     Database();
     virtual ~Database();
-    void save_msg(Message msg);
+    void save_msg(Mail_in msg);
     void delete_msg(uint16_t msg_id);
-    std::vector<Message> getMsgFor(std::string uid);
+    std::vector<Mail_out> getMsgFor(std::string uid);
 
 private:
     sqlite3 *db;
-    std::string filename;
+    const char * filename;
     std::string get_home() const;
     void create_tables();
     void open_database();

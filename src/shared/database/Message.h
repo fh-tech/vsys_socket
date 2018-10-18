@@ -13,17 +13,18 @@
 
 #include <string>
 
-class Message {
-public:
-    Message(std::string subject, std::string payload, std::string from, std::string to)
-            : subject(std::move(subject)),
-              payload(std::move(payload)),
-              from(std::move(from)),
-              to(std::move(to)) {}
-
-    std::string from;
-    std::string payload;
+struct Mail_in {
     std::string subject;
+    std::string payload;
+    std::string from;
+    std::string to;
+};
+
+struct Mail_out {
+    std::string id;
+    std::string subject;
+    std::string payload;
+    std::string from;
     std::string to;
 };
 
