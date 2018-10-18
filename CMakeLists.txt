@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(vsys_socket)
 set(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_FLAGS -pthread)
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
@@ -19,7 +20,9 @@ enable_testing()
 
 ############# Library #############
 add_library(socket-lib
-        src/socket-lib/socket.cpp
+        src/socket-lib/Socket.cpp
+        src/socket-lib/Clientsocket.cpp
+        src/socket-lib/Serversocket.cpp
         src/socket-lib/protocol/ClientRequest.h
         src/socket-lib/protocol/ClientRequestVisitor.h
         src/socket-lib/protocol/ClientRequestPrinter.h
@@ -37,7 +40,7 @@ target_link_libraries(library-tests gtest socket-lib)
 
 ############# Server #############
 add_executable(server
-        src/server/main.cpp)
+        src/server/main.cpp src/server/MailServer.cpp src/server/MailServer.h src/server/ClientConnection.cpp src/server/ClientConnection.h)
 target_link_libraries(server socket-lib)
 
 add_executable(server-tests

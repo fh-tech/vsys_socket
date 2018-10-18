@@ -2,7 +2,11 @@
 // Created by viktorl on 30.09.18.
 //
 
+#include <array>
 #include "Socket.h"
+#include <algorithm>
+#include <vector>
+
 
 Socket::Socket(int sockfd) : sockfd(sockfd) {}
 
@@ -19,13 +23,30 @@ ssize_t Socket::send_msg(std::string message) {
 ssize_t Socket::receive(char *buf, size_t len) const {
     ssize_t rSize;
     if((rSize = recv(sockfd, buf, len, 0)) == -1) {
-        throw new std::runtime_error("failed to receive message");
+        perror("recv: ");
+        throw std::runtime_error("failed to receive message: ");
     } else {
         return rSize;
     }
 }
 
+std::string Socket::read_line() const {
+    std::vector<char> string{};
+    string.reserve(100);
+    char buf;
+    while(true) {
+        if (receive(&buf, 1)) {
+            string.emplace_back(buf);
+            if (buf == '\n') {
+                return std::string{string.begin(), string.end()};
+            }
+        }
+    }
+}
 
+int Socket::getSockfd() const {
+    return sockfd;
+}
 
 
 

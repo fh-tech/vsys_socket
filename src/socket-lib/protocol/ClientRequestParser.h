@@ -41,9 +41,9 @@ public:
                         }
                     } else { return std::get<1>(capture_pw_result); }
 
-                } else { return std::get<1>(match_result); }
+                } else { return std::get<1>(capture_user_result); }
 
-            } else { return std::get<1>(result); }
+            } else { return std::get<1>(match_result); }
 
         }else if(auto result = starts_with("SEND", to_parse);
                  auto remainder = std::get_if<std::string_view >(&result)){
@@ -66,7 +66,7 @@ public:
                         }else{ return std::get<1>(capture_msg_result);}
                     }else{ return std::get<1>(capture_subject_result);}
                 }else{ return std::get<1>(capture_recv_result);}
-            }else{ std::get<1>(match_result); }
+            }else{ return std::get<1>(match_result); }
 
         //starts with LIST
         }else if(auto result = starts_with("LIST", to_parse);
@@ -78,7 +78,7 @@ public:
                 if (match_remainder->length() == 0) {
                     return List{};
                 } else { return "ERR"; }
-            }else{ std::get<1>(match_result); }
+            }else{ return std::get<1>(match_result); }
 
 
 
@@ -100,8 +100,8 @@ public:
                     } else {
                         return "ERR";
                     }
-                }else{ std::get<1>(capture_id_result); }
-            }else{ std::get<1>(match_result);}
+                }else{ return std::get<1>(capture_id_result); }
+            }else{ return std::get<1>(match_result);}
 
 
         }else if(auto result = starts_with("DELETE", to_parse);
@@ -122,8 +122,8 @@ public:
                     } else {
                         return "ERR";
                     }
-                }else{ std::get<1>(capture_id_result); }
-            }else{ std::get<1>(match_result);}
+                }else{ return std::get<1>(capture_id_result); }
+            }else{ return std::get<1>(match_result);}
 
         }else if (auto result = starts_with("QUIT", to_parse);
                   auto remainder = std::get_if<std::string_view>(&result)) {
@@ -134,12 +134,11 @@ public:
                 if (match_remainder->length() == 0) {
                     return Quit{};
                 } else { return "ERR"; }
-            }else{ std::get<1>(match_result); }
+            }else{ return std::get<1>(match_result); }
 
         }else{
             return "ERR";
         }
-        return "ERR";
     }
 
 private:
@@ -171,7 +170,7 @@ private:
     std::variant<std::tuple<std::string_view, std::string_view>, const char*> match_until(const char* until, std::string_view to_parse){
         if(to_parse.length() > 1){
             auto until_pos = to_parse.find(until);
-            if(until_pos > 1) {
+            if(until_pos > 0 && until_pos != std::string_view::npos) {
                 if(until_pos + 1 == to_parse.length()){
                     return std::make_tuple<>(to_parse.substr(0, until_pos), "");
                 }else {
@@ -179,7 +178,7 @@ private:
                                              to_parse.substr(until_pos + 1, to_parse.length()));
                 }
             } else {
-                return "ERR";
+                return "incomplete";
             }
         } else {
             return "incomplete";

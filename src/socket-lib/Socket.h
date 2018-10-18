@@ -22,6 +22,10 @@ public:
 
     operator bool() { return sockfd > 0; }
 
+    std::string read_line() const;
+
+    int getSockfd() const;
+
 private:
     int sockfd;
 };
