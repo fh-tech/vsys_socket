@@ -20,7 +20,4 @@ private:
 };
 
 
-
-
-
 #endif //VSYS_SOCKET_CLIENTSOCKET_H

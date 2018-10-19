@@ -5,13 +5,9 @@
 #include <sstream>
 
 #include <gtest/gtest.h>
-#include <socket-lib/include/include.h>
-#include <socket-lib/protocol/ClientRequestParser.h>
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+#include "../../../src/shared/protocol/ClientRequest.h"
+#include "../../../src/shared/protocol/ClientRequestParser.h"
+#include "../../../src/shared/protocol/ClientRequestPrinter.h"
 
 TEST(test_library, test_gtest) {
     int i = 10;

@@ -4,11 +4,6 @@
 
 #include <gtest/gtest.h>
 
+TEST(test_socket, test_1) {
 
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
-
-TEST(test_socket, test_gtest) {
 }
