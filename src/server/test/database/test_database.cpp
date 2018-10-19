@@ -4,7 +4,8 @@
 
 
 #include <gtest/gtest.h>
-#include "../../../src/server/database/Database.h"
+#include "../../src/database/Database.h"
+
 
 TEST(test_creation, test_db) {
     Database db = Database(nullptr);

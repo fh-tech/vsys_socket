@@ -10,10 +10,11 @@
 #include <array>
 #include <variant>
 #include <thread>
-#include "../shared/socket/Socket.h"
-#include "../shared/protocol/ClientRequest.h"
-#include "../shared/protocol/ClientRequestParser.h"
-#include "../shared/protocol/ClientRequestPrinter.h"
+
+#include <Socket.h>
+#include <ClientRequest.h>
+#include <ClientRequestParser.h>
+#include <ClientRequestPrinter.h>
 
 
 class ClientConnection {

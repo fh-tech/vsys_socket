@@ -5,9 +5,9 @@
 #include <sstream>
 
 #include <gtest/gtest.h>
-#include "../../../src/shared/protocol/ClientRequest.h"
-#include "../../../src/shared/protocol/ClientRequestParser.h"
-#include "../../../src/shared/protocol/ClientRequestPrinter.h"
+#include <ClientRequest.h>
+#include <ClientRequestPrinter.h>
+#include <ClientRequestParser.h>
 
 TEST(test_library, test_gtest) {
     int i = 10;

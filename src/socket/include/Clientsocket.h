@@ -8,10 +8,13 @@
 #include <arpa/inet.h> // inet_ntoa(), ...
 #include "Socket.h"
 
+
 class ClientSocket {
 public:
     ClientSocket();
+
     virtual ~ClientSocket();
+
     Socket connect_to(uint16_t port, std::string ip);
 
 private:

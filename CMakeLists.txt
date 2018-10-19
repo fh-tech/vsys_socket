@@ -39,22 +39,33 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 ############
 
-FILE(GLOB_RECURSE SOCKET_LIB_SRC src/shared/socket "*.cpp")
-FILE(GLOB_RECURSE PROTO_LIB_SRC src/shared/protocol "*.cpp")
+enable_testing()
 
-FILE(GLOB_RECURSE SERVER_SRC src/server "*.cpp")
-FILE(GLOB_RECURSE CLIENT_SRC src/client "*.cpp")
+add_subdirectory(src/socket)
+add_subdirectory(src/protocol)
+add_subdirectory(src/server)
+add_subdirectory(src/client)
+
+
+
+
+
+
+
+
 
 
 ############# Libraries #############
 
 #### Socket - lib ####
-
+#[[
 add_library(socket-lib STATIC
         ${SOCKET_LIB_SRC})
 
+target_include_directories(socket-lib PUBLIC src/socket)
+
 add_executable(socket-tests
-        test/shared/socket/test_socket.cpp)
+        src/socket/test/test_socket.cpp)
 
 target_link_libraries(socket-tests gtest_main)
 
@@ -64,8 +75,10 @@ target_link_libraries(socket-tests gtest_main)
 add_library(protocol-lib STATIC
         ${PROTO_LIB_SRC})
 
+target_include_directories(protocol-lib PUBLIC src/protocol)
+
 add_executable(protocol-tests
-        test/shared/protocol/test_protocol.cpp)
+        src/protocol/test/test_protocol.cpp)
 
 target_link_libraries(protocol-tests gtest_main)
 
@@ -74,22 +87,22 @@ target_link_libraries(protocol-tests gtest_main)
 
 #### Server ####
 
-add_executable(server
+add_executable(src/server
         ${SERVER_SRC})
 
-target_link_libraries(server socket-lib protocol-lib)
+target_link_libraries(src/server socket-lib protocol-lib)
 
-add_executable(server-tests test/server/test_server.cpp)
+add_executable(server-tests src/server/test/test_server.cpp)
 target_link_libraries(server-tests gtest_main)
 
-add_executable(database-tests test/server/database/test_database.cpp)
+add_executable(database-tests src/server/test/database/test_database.cpp)
 target_link_libraries(database-tests gtest_main)
 
 
 #### Client ####
-add_executable(client ${CLIENT_SRC})
-target_link_libraries(client socket-lib protocol-lib)
+add_executable(src/client ${CLIENT_SRC})
+target_link_libraries(src/client socket-lib protocol-lib)
 
-add_executable(client-tests test/client/test_client.cpp)
+add_executable(client-tests src/client/test/test_client.cpp)
 target_link_libraries(client-tests gtest_main)
-
+#]]

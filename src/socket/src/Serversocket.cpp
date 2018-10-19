@@ -2,7 +2,7 @@
 // Created by viktorl on 29.09.18.
 //
 
-#include "Serversocket.h"
+#include "../include/Serversocket.h"
 
 // .sin_addr = htonl(INADDR_ANY) and .sin_port = 0 (for automatic choosing)
 Serversocket::Serversocket(std::string ip, uint16_t port, int backlog)

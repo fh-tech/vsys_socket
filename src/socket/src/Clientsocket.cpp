@@ -1,8 +1,8 @@
 //
 // Created by viktorl on 30.09.18.
 //
-
-#include "Clientsocket.h"
+#include "../include/Clientsocket.h"
+#include "../include/Socket.h"
 
 ClientSocket::ClientSocket() {
     memset(&sock_addr, 0, sizeof(sockaddr_in));
