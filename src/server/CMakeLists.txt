@@ -1,5 +1,3 @@
-
-
 add_executable(server
         src/main.cpp
         src/ClientConnection.cpp
