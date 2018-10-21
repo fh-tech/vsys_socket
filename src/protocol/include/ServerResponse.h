@@ -8,7 +8,7 @@
 #include <string>
 #include <variant>
 #include <vector>
-#include "../../server/src/database/Message.h"
+#include "../../server/src/database/include/Message.h"
 
 struct Success {};
 

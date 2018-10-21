@@ -1,20 +1,23 @@
 add_executable(server
         src/main.cpp
-        src/ClientConnection.h
+        src/include/ClientConnection.h
         src/ClientConnection.cpp
         src/MailServer.cpp
-        src/MailServer.h
+        src/include/MailServer.h
         src/database/Database.cpp
-        src/database/Database.h
-        src/database/Message.h
-        src/ServerResponseGenerator.h
-        src/ServerResponseGenerator.cpp test/test_serverResponseGenerator.cpp)
+        src/database/include/Database.h
+        src/database/include/Message.h
+        src/include/ServerResponseGenerator.h
+        src/ServerResponseGenerator.cpp)
 
 target_link_libraries(server socket-lib protocol-lib)
 
 ### TESTS
 add_executable(test_server
-        test/test_server.cpp)
+        test/test_server.cpp
+        test/test_serverResponseGenerator.cpp
+        src/ServerResponseGenerator.cpp
+        src/database/Database.cpp)
 
 add_executable(test_database
         test/database/test_database.cpp

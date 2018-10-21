@@ -4,7 +4,7 @@
 
 
 #include <gtest/gtest.h>
-#include "../../src/database/Database.h"
+#include "../../src/database/include/Database.h"
 
 
 TEST(test_creation, test_db) {

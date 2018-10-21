@@ -2,7 +2,7 @@
 // Created by viktorl on 02.10.18.
 //
 
-#include "Database.h"
+#include "include/Database.h"
 
 Database::Database() : Database((get_home() + "/.mail.db").c_str()) {}
 

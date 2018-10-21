@@ -4,9 +4,9 @@
 // Created by viktorl on 20.10.18.
 //
 
-#include "ServerResponseGenerator.h"
-#include "database/Message.h"
-#include "database/Database.h"
+#include "include/ServerResponseGenerator.h"
+#include "database/include/Message.h"
+#include "database/include/Database.h"
 
 ServerResponseGenerator::ServerResponseGenerator(std::string username) {}
 

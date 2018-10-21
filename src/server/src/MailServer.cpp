@@ -3,8 +3,8 @@
 //
 
 #include <memory>
-#include "MailServer.h"
-#include "ClientConnection.h"
+#include "include/MailServer.h"
+#include "include/ClientConnection.h"
 
 void MailServer::listen() {
     while(running){

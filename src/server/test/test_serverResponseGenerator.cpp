@@ -3,9 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include <ClientRequest.h>
-#include <ServerResponse.h>
-#include "../src/ServerResponseGenerator.h"
+#include "../src/include/ServerResponseGenerator.h"
 
 TEST(test_server_RG, test_Login) {
 
