@@ -14,3 +14,18 @@ void ServerResponsePrinter::operator()(const Success &l) {
 void ServerResponsePrinter::operator()(Error const &l) {
     os << "ERR" << std::endl;
 }
+
+void ServerResponsePrinter::operator()(Mail_list const &l) {
+    os << "Amount of messages: " << l.mail_out.size() << std::endl;
+    for(auto &m : l.mail_out) {
+        os << "(" << m.id << ") " << m.subject << std::endl;
+    }
+}
+
+void ServerResponsePrinter::operator()(Mail const &l) {
+    Mail_out m = l.mail;
+    os << "Subject: " << m.subject << std::endl;
+    os << "From: " << m.from << std::endl;
+    os << "To: " << m.to << std::endl;
+    os << "Message: " << m.payload << std::endl;
+}

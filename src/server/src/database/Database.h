@@ -23,6 +23,7 @@ public:
     void save_msg(Mail_in mail_in);
     void delete_msg(uint16_t mail_id);
     std::vector<Mail_out> getMsgFor(std::string uid);
+    Mail_out getMsg(std::string mail_id);
 
 private:
     sqlite3 *db;
@@ -37,7 +38,7 @@ private:
             std::string successMsg);
     inline bool db_exists() const;
 
-    static int getMsgCallback(void *, int, char**, char**);
+    static int getMsgsCallback(void *, int, char **, char **);
 };
 
 

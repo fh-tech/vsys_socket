@@ -74,6 +74,15 @@ void Database::delete_msg(uint16_t mail_id) {
     executeStatement(sql, nullptr, nullptr, errMsg, successMsg);
 }
 
+Mail_out Database::getMsg(std::string mail_id) {
+    std::string sql = "SELECT * FROM MAIL WHERE mail_id = \'" + mail_id + "\';";
+    std::string successMsg = "Retrieving message was successful.";
+    std::string errMsg = "Failed to retrieve message. ";
+    std::vector<Mail_out> result{};
+    executeStatement(sql, getMsgsCallback, &result, errMsg, successMsg);
+    return result.at(0);
+}
+
 /**
  * returns all msgs for uid
  */
@@ -82,7 +91,7 @@ std::vector<Mail_out> Database::getMsgFor(std::string uid) {
     std::string successMsg = "Retrieving data was successful.";
     std::string errMsg = "Failed to retrieve data. ";
     std::vector<Mail_out> result{};
-    executeStatement(sql, getMsgCallback, &result, errMsg, successMsg);
+    executeStatement(sql, getMsgsCallback, &result, errMsg, successMsg);
     return result;
 }
 
@@ -102,7 +111,7 @@ void Database::executeStatement(std::string statement,
     }
 }
 
-int Database::getMsgCallback(void * msg, int argc, char **argv, char **azColName) {
+int Database::getMsgsCallback(void *msg, int argc, char **argv, char **azColName) {
     if(argc == 5) {
         Mail_out m = {
                 .id = argv[0],
@@ -119,6 +128,8 @@ int Database::getMsgCallback(void * msg, int argc, char **argv, char **azColName
     }
     return 0;
 }
+
+
 
 
 

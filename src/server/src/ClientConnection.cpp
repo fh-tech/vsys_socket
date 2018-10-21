@@ -2,13 +2,10 @@
 // Created by daniel on 15.10.18.
 //
 
-#include <sstream>
-#include <ServerResponsePrinter.h>
+
 #include "ClientConnection.h"
 
-ClientConnection::ClientConnection(const Socket &socket) : client(socket) {
-
-}
+ClientConnection::ClientConnection(const Socket &socket) : client(socket) {}
 
 void ClientConnection::run() {
     this->handle_connection();
@@ -42,9 +39,9 @@ void ClientConnection::handle_message(const std::variant<ClientRequest, const ch
         // ClientRequestPrinter is a visitor (a callable that accepts every possible alternative from every variant
         std::visit(ClientRequestPrinter{std::cout}, *req);
 
-        auto response = std::visit(ServerResponseGenerator(this.username), *req);
+        auto response = std::visit(ServerResponseGenerator(username), *req);
         std::stringstream ss{};
-        std::visit(ServerResponsePrinter{ss}, response);
+//        std::visit(ServerResponsePrinter(ss), response);
 
         if(std::holds_alternative<Login>(*req)) {
             if(std::holds_alternative<Success>(response)) {

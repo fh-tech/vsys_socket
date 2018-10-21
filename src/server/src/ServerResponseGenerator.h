@@ -6,9 +6,8 @@
 #define VSYS_SOCKET_SERVERRESPONSEGENERATOR_H
 
 
-#include "ClientRequest.h"
-#include "ServerResponse.h"
-#include "ClientConnection.h"
+#include <ClientRequest.h>
+#include <ServerResponse.h>
 
 class ServerResponseGenerator {
 public:
