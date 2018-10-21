@@ -17,6 +17,10 @@ public:
     void operator()(Success const &l);
 
     void operator()(Error const &l);
+
+    void operator()(Mail_list const &l);
+
+    void operator()(Mail const &l);
 };
 
 

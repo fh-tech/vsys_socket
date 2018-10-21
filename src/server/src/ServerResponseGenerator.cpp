@@ -8,10 +8,10 @@
 #include "database/Message.h"
 #include "database/Database.h"
 
+ServerResponseGenerator::ServerResponseGenerator(std::string username) {}
+
 ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
     try {
-        //TODO: add from also
-
         Mail_in m = {
                 .subject = Send.subject,
                 .payload = Send.msg,
@@ -21,7 +21,7 @@ ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
         Database db = Database();
         db.save_msg(m);
         return Success();
-    } catch(std::runtime_error &e) {
+    } catch (std::runtime_error &e) {
         return Error();
     }
 }
@@ -32,14 +32,23 @@ ServerResponse ServerResponseGenerator::operator()(const Login &login) {
 }
 
 ServerResponse ServerResponseGenerator::operator()(const List &list) {
-//    Database db = Database();
-//    db.getMsgFor()
-    return Success();
+    try {
+        Database db = Database();
+        std::vector<Mail_out> mail_out = db.getMsgFor(this->username);
+        return Mail_list{.mail_out = mail_out};
+    } catch (std::runtime_error &e) {
+        return Error();
+    }
 }
 
 ServerResponse ServerResponseGenerator::operator()(const Read &read) {
-//    Database db = Database();
-    return Error();
+    try {
+        Database db = Database();
+        Mail_out m = db.getMsg(std::to_string(read.id));
+        return Mail{.mail = m};
+    } catch (std::runtime_error &e) {
+        return Error();
+    }
 }
 
 ServerResponse ServerResponseGenerator::operator()(const Delete &del) {
@@ -50,9 +59,7 @@ ServerResponse ServerResponseGenerator::operator()(const Quit &quit) {
     return Error();
 }
 
-ServerResponseGenerator::ServerResponseGenerator(std::string username) :username(std::move(username)) {
 
-}
 
 
 

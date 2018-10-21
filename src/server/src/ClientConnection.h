@@ -5,7 +5,7 @@
 #ifndef VSYS_SOCKET_CLIENTCONNECTION_H
 #define VSYS_SOCKET_CLIENTCONNECTION_H
 
-
+#include <sstream>
 #include <atomic>
 #include <array>
 #include <variant>
@@ -14,11 +14,14 @@
 #include <ClientRequestParser.h>
 #include <ClientRequestPrinter.h>
 #include "ServerResponseGenerator.h"
+#include <ServerResponsePrinter.h>
+#include "../../socket/include/Socket.h"
+
 
 
 class ClientConnection {
 public:
-    ClientConnection(const Socket &socket);
+    explicit ClientConnection(const Socket &socket);
     void run();
     void handle_connection();
     std::variant<ClientRequest, const char*> get_msg();

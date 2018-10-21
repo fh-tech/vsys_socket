@@ -22,7 +22,7 @@ struct Mail {
     Mail_out mail;
 };
 
-using ServerResponse = std::variant<Success, Error>;
+using ServerResponse = std::variant<Success, Error, Mail_list, Mail>;
 
 
 #endif //VSYS_SOCKET_SERVERRESPONSE_H
