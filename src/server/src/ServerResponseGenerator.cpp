@@ -10,6 +10,8 @@
 
 ServerResponseGenerator::ServerResponseGenerator(std::string username) {}
 
+ServerResponseGenerator::ServerResponseGenerator(std::string username) {}
+
 ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
     try {
         Mail_in m = {
