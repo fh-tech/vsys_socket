@@ -21,7 +21,7 @@
 
 class ClientConnection {
 public:
-    explicit ClientConnection(const Socket &socket);
+    explicit ClientConnection(const Socket &socket, ServerResponseGenerator sg);
     void run();
     void handle_connection();
     std::variant<ClientRequest, const char*> get_msg();
@@ -33,6 +33,7 @@ private:
     Socket client;
     std::atomic<bool> keep_running = true;
     std::string username = "";
+    ServerResponseGenerator sg;
 
 //    enum Status: char {
 //        waiting,

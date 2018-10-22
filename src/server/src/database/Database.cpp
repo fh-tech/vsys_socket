@@ -102,9 +102,10 @@ void Database::executeStatement(std::string statement,
                                 std::string successMsg) {
     char *sqlError = nullptr;
     if ((sqlite3_exec(db, statement.c_str(), callback, result, &sqlError)) != SQLITE_OK) {
-        std::stringstream ss(errorMsg);
+        std::stringstream ss{};
+        ss << errorMsg;
         ss << sqlError;
-        sqlite3_free(sqlError);
+//        free(sqlError);
         throw std::runtime_error(ss.str());
     } else {
         std::cout << successMsg << std::endl;

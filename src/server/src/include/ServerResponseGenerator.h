@@ -8,11 +8,12 @@
 
 #include <ClientRequest.h>
 #include <ServerResponse.h>
+#include "../database/include/Database.h"
 
 class ServerResponseGenerator {
 public:
 
-    explicit ServerResponseGenerator(std::string username);
+    explicit ServerResponseGenerator(Database db, std::string username);
 
     ServerResponse operator()(Send const &Send);
     ServerResponse operator()(Login const &login);
@@ -22,6 +23,7 @@ public:
     ServerResponse operator()(Quit const &quit);
 
 private:
+    Database db;
     std::string username;
 };
 
