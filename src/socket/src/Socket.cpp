@@ -40,6 +40,8 @@ std::string Socket::read_line() const {
             if (buf == '\n') {
                 return std::string{string.begin(), string.end()};
             }
+        } else {
+            throw std::runtime_error("Connection closed");
         }
     }
 }
