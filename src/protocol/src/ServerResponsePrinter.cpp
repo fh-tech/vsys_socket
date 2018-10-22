@@ -20,6 +20,7 @@ void ServerResponsePrinter::operator()(Mail_list const &l) {
     for(auto &m : l.mail_out) {
         os << "(" << m.id << ") " << m.subject << std::endl;
     }
+    os << "." << std::endl;
 }
 
 void ServerResponsePrinter::operator()(Mail const &l) {
@@ -29,4 +30,5 @@ void ServerResponsePrinter::operator()(Mail const &l) {
     os << m.from << std::endl;
     os << m.to << std::endl;
     os << m.payload << std::endl;
+    os << "." << std::endl;
 }
