@@ -19,9 +19,9 @@ struct Mail_in {
 struct Mail_out {
     std::string id;
     std::string subject;
-    std::string payload;
     std::string from;
     std::string to;
+    std::string payload;
 };
 
 #endif //VSYS_SOCKET_MESSAGE_H

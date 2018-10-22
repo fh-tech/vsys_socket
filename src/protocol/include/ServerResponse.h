@@ -14,8 +14,13 @@ struct Success {};
 
 struct Error {};
 
+struct MailDetail{
+    std::string id;
+    std::string subject;
+};
+
 struct Mail_list{
-    std::vector<Mail_out> mail_out;
+    std::vector<MailDetail> mail_out;
 };
 
 struct Mail {

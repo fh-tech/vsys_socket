@@ -16,16 +16,16 @@ void ServerResponsePrinter::operator()(Error const &l) {
 }
 
 void ServerResponsePrinter::operator()(Mail_list const &l) {
-    os << "LIST:  " << l.mail_out.size() << std::endl;
+    os << "LIST" << std::endl;
     for(auto &m : l.mail_out) {
-        os << "(" << m.id << ") " << m.subject << std::endl;
+        os << m.id  << " " << m.subject << std::endl;
     }
     os << "." << std::endl;
 }
 
 void ServerResponsePrinter::operator()(Mail const &l) {
     Mail_out m = l.mail;
-    os << "MAIL" << std::endl;
+    os << "MAIL " << m.id << std::endl;
     os << m.subject << std::endl;
     os << m.from << std::endl;
     os << m.to << std::endl;
