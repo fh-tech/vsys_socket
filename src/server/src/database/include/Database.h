@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include "Message.h"
 #include <vector>
+#include <Mail.h>
 
 class Database {
 public:

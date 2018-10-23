@@ -23,12 +23,11 @@ void ServerResponsePrinter::operator()(Mail_list const &l) {
     os << "." << std::endl;
 }
 
-void ServerResponsePrinter::operator()(Mail const &l) {
-    Mail_out m = l.mail;
-    os << "MAIL " << m.id << std::endl;
-    os << m.subject << std::endl;
-    os << m.from << std::endl;
-    os << m.to << std::endl;
-    os << m.payload << std::endl;
+void ServerResponsePrinter::operator()(Mail_out const &l) {
+    os << "MAIL " << l.id << std::endl;
+    os << l.subject << std::endl;
+    os << l.from << std::endl;
+    os << l.to << std::endl;
+    os << l.payload << std::endl;
     os << "." << std::endl;
 }

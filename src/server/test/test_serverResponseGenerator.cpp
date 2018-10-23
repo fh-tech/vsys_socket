@@ -6,6 +6,7 @@
 #include <ServerResponsePrinter.h>
 #include "../src/include/ServerResponseGenerator.h"
 
+/*
 TEST(test_server_RG, test_Login) {
 
     ClientRequest cr = Login {
@@ -52,4 +53,4 @@ TEST(test_server_RG, test_LIST) {
 
 
     ASSERT_TRUE(std::holds_alternative<Success>(response));
-}
+}*/

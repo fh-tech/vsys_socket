@@ -7,6 +7,8 @@
 #include <Clientsocket.h>
 #include <ClientRequest.h>
 #include <ClientRequestPrinter.h>
+#include <ServerResponse.h>
+#include <ServerResponseParser.h>
 
 void showOptions_preLogin();
 void showOptions_postLogin();
@@ -22,8 +24,8 @@ std::string getUsername();
 //will be implemented in part2
 //buildLoginRequest();
 
+//TODO: started with ip and port as params
 int main() {
-    char buf[256];
     ClientSocket csocket = ClientSocket();
     Socket s = csocket.connect_to(10025, "0.0.0.0");
 
@@ -35,8 +37,8 @@ int main() {
         if(option == 2) exit(0);
         ClientRequest cr = buildLoginRequest();
         std::stringstream ss{};
-//        std::visit(ClientRequestPrinter{ss}, cr);
-//        std::cout << ss.str() << std::endl;
+        std::visit(ClientRequestPrinter{ss}, cr);
+        std::cout << ss.str() << std::endl;
         s.send_msg(ss.str());
         std::string line = s.read_line();
         do {
@@ -54,6 +56,8 @@ int main() {
 //    }
     return 0;
 }
+
+
 
 
 void showOptions_postLogin() {

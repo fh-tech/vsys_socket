@@ -10,11 +10,6 @@
 #include <ClientRequestParser.h>
 #include <ServerResponseParser.h>
 
-TEST(test_library, test_gtest) {
-    int i = 10;
-    ASSERT_TRUE(i < 200);
-}
-
 TEST(client_request, print){
 
     ClientRequest client_rq = Login {"username", "password"};
@@ -152,14 +147,14 @@ TEST(server_resp_parser, mail){
 
     ASSERT_TRUE(std::holds_alternative<ServerResponse>(result));
     auto sresponse = std::get<ServerResponse>(result);
-    ASSERT_TRUE(std::holds_alternative<Mail>(sresponse));
-    auto mail = std::get<Mail>(sresponse);
+    ASSERT_TRUE(std::holds_alternative<Mail_out>(sresponse));
+    auto mail = std::get<Mail_out>(sresponse);
 
-    ASSERT_EQ("1", mail.mail.id);
-    ASSERT_EQ("sub", mail.mail.subject);
-    ASSERT_EQ("to", mail.mail.to);
-    ASSERT_EQ("from", mail.mail.from);
-    ASSERT_EQ("msg\nmsg", mail.mail.payload);
+    ASSERT_EQ("1", mail.id);
+    ASSERT_EQ("sub", mail.subject);
+    ASSERT_EQ("to", mail.to);
+    ASSERT_EQ("from", mail.from);
+    ASSERT_EQ("msg\nmsg", mail.payload);
 
 }
 

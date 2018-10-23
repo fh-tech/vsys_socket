@@ -8,7 +8,7 @@
 #include <string>
 #include <variant>
 #include <vector>
-#include "../../server/src/database/include/Message.h"
+#include "Mail.h"
 
 struct Success {};
 
@@ -23,11 +23,8 @@ struct Mail_list{
     std::vector<MailDetail> mail_out;
 };
 
-struct Mail {
-    Mail_out mail;
-};
-
-using ServerResponse = std::variant<Success, Error, Mail_list, Mail>;
+// Mail_out is used in Response and Server (ServerResponseGenerator)
+using ServerResponse = std::variant<Success, Error, Mail_list, Mail_out>;
 
 
 #endif //VSYS_SOCKET_SERVERRESPONSE_H

@@ -13,15 +13,14 @@
 #include <ClientRequest.h>
 #include <ClientRequestParser.h>
 #include <ClientRequestPrinter.h>
-#include "ServerResponseGenerator.h"
-#include <ServerResponsePrinter.h>
 #include "../../../socket/include/Socket.h"
-
+#include "../database/include/Database.h"
+#include "ServerResponseGenerator.h"
 
 
 class ClientConnection {
 public:
-    explicit ClientConnection(const Socket &socket, ServerResponseGenerator sg);
+    explicit ClientConnection(const Socket &socket);
     void run();
     void handle_connection();
     std::variant<ClientRequest, const char*> get_msg();
@@ -29,10 +28,12 @@ public:
     void handle_message(const std::variant<ClientRequest, const char*>& request);
     const Socket& getSocket() const;
 
+    Database db;
+    std::string username = "";
+    std::atomic<bool> keep_running = true;
+
 private:
     Socket client;
-    std::atomic<bool> keep_running = true;
-    std::string username = "";
     ServerResponseGenerator sg;
 
 //    enum Status: char {

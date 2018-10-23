@@ -5,15 +5,15 @@
 #ifndef VSYS_SOCKET_SERVERRESPONSEGENERATOR_H
 #define VSYS_SOCKET_SERVERRESPONSEGENERATOR_H
 
-
-#include <ClientRequest.h>
+#include<ClientRequest.h>
 #include <ServerResponse.h>
-#include "../database/include/Database.h"
+
+// forward declaration
+class ClientConnection;
 
 class ServerResponseGenerator {
 public:
-
-    explicit ServerResponseGenerator(Database db, std::string username);
+    explicit ServerResponseGenerator(ClientConnection * clientConnection);
 
     ServerResponse operator()(Send const &Send);
     ServerResponse operator()(Login const &login);
@@ -23,8 +23,7 @@ public:
     ServerResponse operator()(Quit const &quit);
 
 private:
-    Database db;
-    std::string username;
+    ClientConnection * clientConnection;
 };
 
 

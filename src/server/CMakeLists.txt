@@ -17,6 +17,7 @@ add_executable(test_server
         test/test_server.cpp
         test/test_serverResponseGenerator.cpp
         src/ServerResponseGenerator.cpp
+        src/include/ServerResponseGenerator.h
         src/database/Database.cpp)
 
 add_executable(test_database
@@ -26,3 +27,4 @@ add_executable(test_database
 target_link_libraries(test_server gtest_main)
 target_link_libraries(test_server protocol-lib)
 target_link_libraries(test_database gtest_main)
+target_link_libraries(test_database protocol-lib)

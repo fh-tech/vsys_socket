@@ -44,14 +44,11 @@ public:
                                 Mail_out mail = {
                                         .id = std::string{std::get<0>(*capture_id)},
                                         .subject = std::string{std::get<0>(*capture_subject)},
+                                        .payload = std::string{std::get<0>(*capture_payload)},
                                         .from = std::string{std::get<0>(*capture_from)},
                                         .to = std::string{std::get<0>(*capture_to)},
-                                        .payload = std::string{std::get<0>(*capture_payload)},
                                 };
-                                return Mail {
-                                    .mail= mail
-                                };
-
+                                return mail;
                             }else { return std::get<1>(capture_payload_result); }
                         }else { return std::get<1>(capture_from_result); }
                     }else { return std::get<1>(capture_to_result); }

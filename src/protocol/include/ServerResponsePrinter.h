@@ -20,7 +20,7 @@ public:
 
     void operator()(Mail_list const &l);
 
-    void operator()(Mail const &l);
+    void operator()(Mail_out const &l);
 };
 
 

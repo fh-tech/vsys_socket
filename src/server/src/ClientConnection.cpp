@@ -3,11 +3,13 @@
 //
 
 
+#include <ServerResponsePrinter.h>
 #include "include/ClientConnection.h"
 
-ClientConnection::ClientConnection(const Socket &socket, ServerResponseGenerator sg)
+ClientConnection::ClientConnection(const Socket &socket)
         : client(socket),
-          sg(sg) {}
+          sg(ServerResponseGenerator(this)),
+          db(Database()){}
 
 void ClientConnection::run() {
     this->handle_connection();
@@ -44,9 +46,9 @@ void ClientConnection::handle_message(const std::variant<ClientRequest, const ch
 
         auto response = std::visit(sg, *req);
         std::stringstream ss{};
-//        std::visit(ServerResponsePrinter(ss), response);
-
+        std::visit(ServerResponsePrinter(ss), response);
         client.send_msg(ss.str());
+
     } else {
         std::cout << std::get<const char *>(request) << std::flush;
     }
