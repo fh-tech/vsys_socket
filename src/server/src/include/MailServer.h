@@ -18,9 +18,9 @@ private:
     Serversocket serverSocket;
     bool running = true;
 
-    std::unordered_map<connection_id, std::unique_ptr<ClientConnection>> active_connections{};
+    std::unordered_map<size_t , std::unique_ptr<ClientConnection>> active_connections{};
 
-    connection_id next_id = 0;
+    size_t next_id = 0;
 
 public:
     MailServer(std::string ip, uint16_t port)

@@ -18,7 +18,7 @@ ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
         Mail_in m = {
                 .subject = Send.subject,
                 .payload = Send.msg,
-                .from = "",
+                .from = clientConnection->username,
                 .to = Send.to
         };
         this->clientConnection->db.save_msg(m);

@@ -13,6 +13,7 @@
 #include <ClientRequest.h>
 #include <ClientRequestParser.h>
 #include <ClientRequestPrinter.h>
+#include <functional>
 #include "../../../socket/include/Socket.h"
 #include "../database/include/Database.h"
 #include "ServerResponseGenerator.h"
@@ -20,7 +21,14 @@
 
 class ClientConnection {
 public:
-    explicit ClientConnection(const Socket &socket);
+
+    ClientConnection(size_t id, const Socket &socket, std::function<void()> deleter)
+            : id(id)
+            , client(socket)
+            , deleter(std::move(deleter))
+            , sg(this)
+    {}
+
     void run();
     void handle_connection();
     std::variant<ClientRequest, const char*> get_msg();
@@ -35,6 +43,9 @@ public:
 private:
     Socket client;
     ServerResponseGenerator sg;
+
+    size_t id;
+    std::function<void()> deleter;
 
 //    enum Status: char {
 //        waiting,

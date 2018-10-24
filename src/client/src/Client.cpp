@@ -145,7 +145,7 @@ Send Client::buildSendRequest() const {
     std::string msg;
     std::string tmp;
 
-    while (tmp != ".\n1") {
+    while (tmp != ".\n") {
         std::getline(std::cin, tmp);
         tmp.push_back('\n');
         msg += tmp;

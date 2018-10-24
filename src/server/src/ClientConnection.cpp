@@ -6,19 +6,20 @@
 #include <ServerResponsePrinter.h>
 #include "include/ClientConnection.h"
 
-ClientConnection::ClientConnection(const Socket &socket)
-        : client(socket),
-          sg(ServerResponseGenerator(this)),
-          db(Database()){}
-
 void ClientConnection::run() {
     this->handle_connection();
+    deleter();
 }
 
 void ClientConnection::handle_connection() {
     while (keep_running) {
-        std::variant < ClientRequest, const char*> msg = get_msg();
-        handle_message(msg);
+        try {
+            std::variant < ClientRequest, const char*> msg = get_msg();
+            handle_message(msg);
+        }catch(std::runtime_error& e){
+            std::cerr << e.what() << std::endl;
+            keep_running = false;
+        }
     }
 }
 
@@ -40,9 +41,8 @@ bool ClientConnection::operator==(const ClientConnection &other) const {
 void ClientConnection::handle_message(const std::variant<ClientRequest, const char *> &request) {
     if (auto req = std::get_if<ClientRequest>(&request)) {
         // ClientRequestPrinter is a visitor (a callable that accepts every possible alternative from every variant
-        std::visit(ClientRequestPrinter{std::cout}, *req);
-
         auto response = std::visit(sg, *req);
+
         std::stringstream ss{};
         std::visit(ServerResponsePrinter(ss), response);
         client.send_msg(ss.str());
