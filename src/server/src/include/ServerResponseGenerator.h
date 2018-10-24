@@ -15,12 +15,12 @@ class ServerResponseGenerator {
 public:
     explicit ServerResponseGenerator(ClientConnection * clientConnection);
 
-    ServerResponse operator()(Send const &Send);
-    ServerResponse operator()(Login const &login);
-    ServerResponse operator()(List const &list);
-    ServerResponse operator()(Read const &read);
-    ServerResponse operator()(Delete const &del);
-    ServerResponse operator()(Quit const &quit);
+    ServerResponse operator()(Send     const &Send);
+    ServerResponse operator()(Login    const &login);
+    ServerResponse operator()(List     const &list);
+    ServerResponse operator()(Read     const &read);
+    ServerResponse operator()(Delete   const &del);
+    ServerResponse operator()(Quit     const &quit);
 
 private:
     ClientConnection * clientConnection;

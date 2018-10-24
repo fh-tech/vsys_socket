@@ -30,7 +30,8 @@ ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
 }
 
 ServerResponse ServerResponseGenerator::operator()(const Login &login) {
-    // TODO implement LDAP
+    //TODO: LDAPÜ-sama
+    clientConnection->username = login.username;
     return Success();
 }
 

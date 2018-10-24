@@ -134,20 +134,24 @@ std::string Client::getRequestString(ClientRequest &cr) const {
 Send Client::buildSendRequest() const {
     std::string to;
     std::cout << "Recipient: " << std::flush;
-    std::cin >> to;
+    std::getline(std::cin, to);
+
     std::string subject;
     std::cout << "Subject: " << std::endl;
-    std::cin >> subject;
+    std::getline(std::cin, subject);
 
     std::cout << "Write Msg: (ends with \\n.\\n)" << std::endl;
+
     std::string msg;
     std::string tmp;
 
-    while (tmp != ".") {
-        std::cin >> tmp;
+    while (tmp != ".\n1") {
+        std::getline(std::cin, tmp);
+        tmp.push_back('\n');
         msg += tmp;
     }
 
+    msg.pop_back();
     msg.pop_back();
 
     return Send{
