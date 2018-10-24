@@ -41,6 +41,7 @@ private:
 
     // handling
     void handleLoginResponse(ServerResponse response);
+    void handleListResponse(ServerResponse response);
 
     std::string getUsername() const;
 

@@ -101,6 +101,9 @@ void Client::handleRequest(char option) {
 
         case '3': {
             ClientRequest cr = this->buildListRequest();
+            this->socket->send_msg(getRequestString(cr));
+            response = this->get_Response();
+            this->handleListResponse(response);
             break;
         }
 
@@ -206,6 +209,10 @@ void Client::handleLoginResponse(ServerResponse response) {
     }
 }
 
-
+void Client::handleListResponse(ServerResponse response) {
+    if(auto list = std::get_if<Mail_list>(&response)){
+        this->inbox = list->mail_out;
+    }
+}
 
 

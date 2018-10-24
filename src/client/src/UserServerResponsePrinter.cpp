@@ -12,11 +12,16 @@ void UserServerResponsePrinter::operator()(Success const &l) {
     os << "Success" << std::endl;
 }
 
-void UserServerResponsePrinter::operator()(Mail_list const &l) {
-    os << "Number of messages: " << l.mail_out.size() << std::endl;
+void UserServerResponsePrinter::operator()(Mail_list const &list) {
 
-    for(int i = 0; i < l.mail_out.size(); i++) {
-        os << "(" << i << ") " << l.mail_out.at(i).subject << std::endl;
+    std::cout << "============ Inbox =============" << std::endl;
+    if(!list.mail_out.empty()){
+        for(auto const& mail: list.mail_out){
+            std::cout << "[ " << mail.id << " ]" << "\t" << mail.subject << std::endl;
+        }
+        std::cout << std::endl;
+    } else {
+        std::cout << " empty." << std::endl;
     }
 }
 
