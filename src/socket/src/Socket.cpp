@@ -18,7 +18,7 @@ Socket::~Socket() {
 // returns - 1 on failure and on success number of characters sent
 ssize_t Socket::send_msg(std::string message) {
     // with 0 flag equivalent to write()
-    return send(sockfd, message.c_str(), message.length() + 1, 0);
+    return send(sockfd, message.c_str(), message.length(), 0);
 }
 
 ssize_t Socket::receive(char *buf, size_t len) const {

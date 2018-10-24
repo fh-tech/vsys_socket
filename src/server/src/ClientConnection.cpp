@@ -17,8 +17,7 @@ void ClientConnection::run() {
 
 void ClientConnection::handle_connection() {
     while (keep_running) {
-        std::variant < ClientRequest,
-        const char*> msg = get_msg();
+        std::variant < ClientRequest, const char*> msg = get_msg();
         handle_message(msg);
     }
 }
@@ -26,8 +25,7 @@ void ClientConnection::handle_connection() {
 std::variant<ClientRequest, const char *> ClientConnection::get_msg() {
     ClientRequestParser parser;
     std::string msg;
-    std::variant < ClientRequest,
-    const char*> result;
+    std::variant < ClientRequest, const char*> result;
     do {
         msg += client.read_line();
         result = parser.parse(msg);

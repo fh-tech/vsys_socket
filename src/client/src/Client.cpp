@@ -30,8 +30,7 @@ void Client::start() {
 ServerResponse Client::get_Response() const {
     ServerResponseParser parser{};
     std::string msg;
-    std::variant < ServerResponse,
-    const char*> result;
+    std::variant <ServerResponse ,const char*> result;
     do {
         msg += this->socket->read_line();
         result = parser.parse(msg);
@@ -133,7 +132,29 @@ std::string Client::getRequestString(ClientRequest &cr) const {
 }
 
 Send Client::buildSendRequest() const {
-    return Send();
+    std::string to;
+    std::cout << "Recipient: " << std::flush;
+    std::cin >> to;
+    std::string subject;
+    std::cout << "Subject: " << std::endl;
+    std::cin >> subject;
+
+    std::cout << "Write Msg: (ends with \\n.\\n)" << std::endl;
+    std::string msg;
+    std::string tmp;
+
+    while (tmp != ".") {
+        std::cin >> tmp;
+        msg += tmp;
+    }
+
+    msg.pop_back();
+
+    return Send{
+            .to = to,
+            .subject = subject,
+            .msg = msg,
+    };
 }
 
 List Client::buildListRequest() const {

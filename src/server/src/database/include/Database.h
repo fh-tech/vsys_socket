@@ -30,7 +30,7 @@ private:
     sqlite3 *db;
     const char * filename;
     std::string get_home() const;
-    void create_tables();
+    void setup_tables();
     void open_database();
     void executeStatement(std::string statement,
             int(*callback)(void*, int, char**, char**),
