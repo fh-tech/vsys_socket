@@ -96,6 +96,8 @@ void Client::handleRequest(char option) {
         }
         case '2': {
             ClientRequest cr = this->buildSendRequest();
+            this->socket->send_msg(getRequestString(cr));
+            response = this->get_Response();
             break;
         }
 
@@ -109,16 +111,21 @@ void Client::handleRequest(char option) {
 
         case '4': {
             ClientRequest cr = this->buildReadRequest();
+            this->socket->send_msg(getRequestString(cr));
+            response = this->get_Response();
             break;
         }
 
         case '5': {
             ClientRequest cr = this->buildDeleteRequest();
+            this->socket->send_msg(getRequestString(cr));
+            response = this->get_Response();
             break;
         }
-
         case 'q': {
             ClientRequest cr = this->buildQuitRequest();
+            this->socket->send_msg(getRequestString(cr));
+            response = this->get_Response();
             break;
         }
         default:
@@ -172,7 +179,8 @@ Delete Client::buildDeleteRequest() const {
     std::string input;
     std::cout << "Please enter which message you want to delete: " << std::flush;
     std::cin >> input;
-    return {};
+    auto id = static_cast<msg_id>(std::stol(input));
+    return Delete {.id = id};
 }
 
 Quit Client::buildQuitRequest() const {
@@ -180,7 +188,11 @@ Quit Client::buildQuitRequest() const {
 }
 
 Read Client::buildReadRequest() const {
-    return Read();
+    std::string input;
+    std::cout << "Please enter which message you want to read: " << std::flush;
+    std::cin >> input;
+    auto id = static_cast<msg_id>(std::stol(input));
+    return Read {.id = id};
 }
 
 Login Client::buildLoginRequest() const {
