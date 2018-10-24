@@ -1,7 +1,12 @@
-
 add_library(protocol-lib
         src/ClientRequestPrinter.cpp
-        src/ClientRequestParser.cpp)
+        src/ClientRequestParser.cpp
+        include/ServerResponse.h
+        include/ServerResponsePrinter.h
+        src/ServerResponsePrinter.cpp
+        include/ClientRequest.h
+        include/ServerResponseParser.h
+        include/Mail.h)
 
 target_include_directories(protocol-lib PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

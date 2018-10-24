@@ -5,24 +5,19 @@
 
 #include <sstream>
 #include <Clientsocket.h>
+#include <ClientRequest.h>
+#include <ClientRequestPrinter.h>
+#include <ServerResponse.h>
+#include <ServerResponseParser.h>
+#include "include/Client.h"
 
+
+//TODO: started with ip and port as params
 int main() {
-    char buf[256];
-    ClientSocket csocket = ClientSocket();
-
-    Socket s = csocket.connect_to(10025, "0.0.0.0");
-    while (s) {
-        try {
-            s.receive(buf, 10);
-        } catch(std::exception &e) {
-            std::cout << e.what() << std::endl;
-        }
-        int i;
-        std::stringstream{buf} >> i;
-        i++;
-        std::cout << i << std::endl;
-        std::string reply = std::to_string(i);
-        s.send_msg(reply);
-    }
-    return 0;
+    Client client(10025, "127.0.0.1");
+    client.start();
 }
+
+
+
+

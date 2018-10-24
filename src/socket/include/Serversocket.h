@@ -13,7 +13,7 @@ class Serversocket {
 public:
     Serversocket(std::string ip, uint16_t port, int backlog);
     Serversocket(uint16_t port, int backlog);
-    ~Serversocket();
+    virtual ~Serversocket();
     Socket listen_accept() const;
 
 private:

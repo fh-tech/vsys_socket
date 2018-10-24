@@ -5,11 +5,10 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
-#include "MailServer.h"
+#include "include/MailServer.h"
 
 int main() {
-    MailServer server{"127.0.0.1", 8091
-    };
+    MailServer server{"127.0.0.1", 10025};
     server.listen();
 }
 

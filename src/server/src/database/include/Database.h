@@ -14,6 +14,7 @@
 #include <sys/stat.h>
 #include "Message.h"
 #include <vector>
+#include <Mail.h>
 
 class Database {
 public:
@@ -23,12 +24,13 @@ public:
     void save_msg(Mail_in mail_in);
     void delete_msg(uint16_t mail_id);
     std::vector<Mail_out> getMsgFor(std::string uid);
+    Mail_out getMsg(std::string mail_id);
 
 private:
     sqlite3 *db;
     const char * filename;
     std::string get_home() const;
-    void create_tables();
+    void setup_tables();
     void open_database();
     void executeStatement(std::string statement,
             int(*callback)(void*, int, char**, char**),
@@ -37,7 +39,7 @@ private:
             std::string successMsg);
     inline bool db_exists() const;
 
-    static int getMsgCallback(void *, int, char**, char**);
+    static int getMsgsCallback(void *, int, char **, char **);
 };
 
 

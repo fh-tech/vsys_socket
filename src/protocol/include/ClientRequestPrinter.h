@@ -13,8 +13,7 @@ private:
     std::ostream& os;
 public:
 
-    explicit ClientRequestPrinter(std::ostream& os): os(os)
-    {}
+    explicit ClientRequestPrinter(std::ostream& os): os(os) {}
 
     void operator()(Login const &l);
 

@@ -2,14 +2,15 @@
 // Created by viktorl on 02.10.18.
 //
 
-#include "Database.h"
+#include "include/Database.h"
 
-Database::Database() : Database((get_home() + "/.mail.db").c_str()) {}
+Database::Database()
+        : Database((get_home() + "/.mail.db").c_str())
+{}
 
 Database::Database(const char * filename) : filename(filename) {
     open_database();
-    // if database does not exist or it is a in memory db
-    if (!db_exists() || filename == nullptr) create_tables();
+    setup_tables();
 }
 
 Database::~Database() {
@@ -41,8 +42,8 @@ bool Database::db_exists() const {
     return (stat(filename, &buffer) == 0);
 }
 
-void Database::create_tables() {
-    std::string sql = "CREATE TABLE MAIL("
+void Database::setup_tables() {
+    std::string sql = "CREATE TABLE IF NOT EXISTS MAIL("
                       "mail_ID   INTEGER PRIMARY KEY,"
                       "subject   TEXT    NOT NULL,"
                       "payload   TEXT    NULL,"
@@ -74,6 +75,15 @@ void Database::delete_msg(uint16_t mail_id) {
     executeStatement(sql, nullptr, nullptr, errMsg, successMsg);
 }
 
+Mail_out Database::getMsg(std::string mail_id) {
+    std::string sql = "SELECT * FROM MAIL WHERE mail_id = \'" + mail_id + "\';";
+    std::string successMsg = "Retrieving message was successful.";
+    std::string errMsg = "Failed to retrieve message. ";
+    std::vector<Mail_out> result{};
+    executeStatement(sql, getMsgsCallback, &result, errMsg, successMsg);
+    return result.at(0);
+}
+
 /**
  * returns all msgs for uid
  */
@@ -82,7 +92,7 @@ std::vector<Mail_out> Database::getMsgFor(std::string uid) {
     std::string successMsg = "Retrieving data was successful.";
     std::string errMsg = "Failed to retrieve data. ";
     std::vector<Mail_out> result{};
-    executeStatement(sql, getMsgCallback, &result, errMsg, successMsg);
+    executeStatement(sql, getMsgsCallback, &result, errMsg, successMsg);
     return result;
 }
 
@@ -93,16 +103,17 @@ void Database::executeStatement(std::string statement,
                                 std::string successMsg) {
     char *sqlError = nullptr;
     if ((sqlite3_exec(db, statement.c_str(), callback, result, &sqlError)) != SQLITE_OK) {
-        std::stringstream ss(errorMsg);
+        std::stringstream ss{};
+        ss << errorMsg;
         ss << sqlError;
-        sqlite3_free(sqlError);
+//        free(sqlError);
         throw std::runtime_error(ss.str());
     } else {
         std::cout << successMsg << std::endl;
     }
 }
 
-int Database::getMsgCallback(void * msg, int argc, char **argv, char **azColName) {
+int Database::getMsgsCallback(void *msg, int argc, char **argv, char **azColName) {
     if(argc == 5) {
         Mail_out m = {
                 .id = argv[0],
@@ -119,6 +130,8 @@ int Database::getMsgCallback(void * msg, int argc, char **argv, char **azColName
     }
     return 0;
 }
+
+
 
 
 

@@ -24,7 +24,6 @@ struct Send {
     std::string msg;
 };
 
-
 struct Quit {};
 
 

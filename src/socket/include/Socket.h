@@ -14,6 +14,10 @@ class Socket {
 public:
     explicit Socket(int sockfd);
 
+    Socket()
+    : sockfd(-1)
+    {};
+
     ~Socket();
 
     ssize_t send_msg(std::string message);
