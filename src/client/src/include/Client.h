@@ -15,29 +15,36 @@
 #include <ServerResponse.h>
 #include <ServerResponseParser.h>
 
+
 class Client {
 public:
-    Client(uint16_t port, const std::string &ip);;
+    Client(uint16_t port, const std::string &ip);
 
     void start();
 
 private:
-    std::variant<ServerResponse, const char *> get_Response();
+    ServerResponse get_Response() const;
 
-    void showOptions_preLogin();
-    void showOptions_postLogin();
-    int getOption(int min, int max);
-    ClientRequest handleOption(int option);
-    Send buildSendRequest();
-    List buildListRequest();
-    Read buildReadRequest();
-    Delete buildDeleteRequest();
-    Quit buildQuitRequest();
-    //will be implemented in part2
-    Login buildLoginRequest();
-    std::string getUsername();
+    void showOptions_preLogin() const;
+    void showOptions_postLogin() const;
+    char getOption () const;
+    void handleRequest(char option);
+    std::string getRequestString(ClientRequest &cr) const;
 
+    // building
+    Send buildSendRequest() const;
+    List buildListRequest() const;
+    Read buildReadRequest() const;
+    Delete buildDeleteRequest() const;
+    Quit buildQuitRequest() const;
+    Login buildLoginRequest() const;
 
+    // handling
+    void handleLoginResponse(ServerResponse response);
+
+    std::string getUsername() const;
+
+    std::vector<MailDetail> inbox;
     std::unique_ptr<Socket> socket;
     bool loggedIn;
 };

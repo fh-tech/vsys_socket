@@ -18,14 +18,6 @@ int main() {
     client.start();
 }
 
-//    while (s) {
-//        showOptions();
-//        int option = getOption();
-//        if(option == 5) break;
-//        ClientRequest cr = handleOption(option);
-//        s.send_msg(cr);
-//    }
-
 
 
 

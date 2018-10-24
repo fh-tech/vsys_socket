@@ -15,6 +15,7 @@ void ServerResponsePrinter::operator()(Error const &l) {
     os << "ERR" << std::endl;
 }
 
+// \n . \n only necessary for parser to know the end of the message
 void ServerResponsePrinter::operator()(Mail_list const &l) {
     os << "LIST" << std::endl;
     for(auto &m : l.mail_out) {
@@ -23,6 +24,7 @@ void ServerResponsePrinter::operator()(Mail_list const &l) {
     os << "." << std::endl;
 }
 
+//\n . \n only necessary for parser to know the end of the message
 void ServerResponsePrinter::operator()(Mail_out const &l) {
     os << "MAIL " << l.id << std::endl;
     os << l.subject << std::endl;

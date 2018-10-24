@@ -3,7 +3,7 @@
 //
 
 #include "include/Client.h"
-
+#include "include/UserServerResponsePrinter.h"
 
 Client::Client(uint16_t port, const std::string &ip) : loggedIn(false) {
     ClientSocket cs{};
@@ -11,80 +11,66 @@ Client::Client(uint16_t port, const std::string &ip) : loggedIn(false) {
 }
 
 void Client::start() {
-    while(!loggedIn) {
+    while (!loggedIn) {
         showOptions_preLogin();
-        int option = getOption(1,2);
-        if(option == 2) exit(0);
-
-        // only other option
-        ClientRequest cr = buildLoginRequest();
-        std::stringstream ss{};
-        std::visit(ClientRequestPrinter{ss}, cr);
-        // send request
-        this->socket->send_msg(ss.str());
-        // get response
-        auto response = this->get_Response();
-        if(auto res = std::get_if<ServerResponse >(&response)) {
-            if(std::holds_alternative<Success>(*res)) {
-                this->loggedIn = true;
-            } else {
-                std::cout << "Login failed." << std::endl;
-            }
-        } else {
-            std::cout << "Login failed." << std::endl;
-        }
+        char option = getOption();
+        handleRequest(option);
+        if (option == 'q') exit(0);
     }
 
-    while(1) {
+    while (true) {
         showOptions_postLogin();
-        int option = getOption(1,5);
-        if(option == 5) break;
-        ClientRequest cr = handleOption(option);
-        std::stringstream ss{};
-        std::visit(ClientRequestPrinter{ss}, cr);
-        this->socket->send_msg(ss.str());
+        char option = getOption();
+        handleRequest(option);
+        if (option == 'q') exit(0);
     }
 }
 
 
-std::variant<ServerResponse, const char *> Client::get_Response() {
+ServerResponse Client::get_Response() const {
     ServerResponseParser parser{};
     std::string msg;
-    std::variant <ServerResponse ,const char*> result;
+    std::variant < ServerResponse,
+    const char*> result;
     do {
         msg += this->socket->read_line();
         result = parser.parse(msg);
     } while (std::holds_alternative<const char *>(result) && !strcmp(std::get<const char *>(result), "incomplete"));
-    return result;
+    if (auto response = std::get_if<ServerResponse>(&result)) {
+        return *response;
+    } else {
+        return Error();
+    }
 }
 
 
-void Client::showOptions_preLogin() {
+void Client::showOptions_preLogin() const {
     std::cout
             << "Choose option:\n"
             << "(1) LOGIN\n"
-            << "(2) QUIT\n" << std::endl;
+            << "(q) QUIT\n" << std::endl;
 }
 
-void Client::showOptions_postLogin() {
+void Client::showOptions_postLogin() const {
     std::cout
             << "Choose option:\n"
-            << "(1) SEND\n"
-            << "(2) LIST\n"
-            << "(3) READ\n"
-            << "(4) DEL\n"
-            << "(5) QUIT\n" << std::endl;
+            << "(2) SEND\n"
+            << "(3) LIST\n"
+            << "(4) READ\n"
+            << "(5) DEL\n"
+            << "(q) QUIT\n" << std::endl;
 }
 
-int Client::getOption(int min, int max) {
+char Client::getOption() const {
     std::string line;
-    int input;
-    while (1) {
-        std::cout << ": ";
+    char input;
+    while (true) {
+        std::cout << ": " << std::flush;
         std::getline(std::cin, line);
         std::stringstream ss(line);
         if (ss >> input) {
-            if (ss.eof() && input >= min && input <= max) {   // Success
+            std::tuple range = this->loggedIn ? std::make_tuple('2', '5') : std::make_tuple('1', '5');
+            if ((input >= std::get<0>(range) && input <= std::get<1>(range)) || input == 'q') {
                 break;
             }
         }
@@ -93,64 +79,106 @@ int Client::getOption(int min, int max) {
     return input;
 }
 
-ClientRequest Client::handleOption(int option) {
-    ClientRequest cr{};
-    switch(option) {
-        case 1:
-            cr = this->buildSendRequest();
+// 1. builds a request
+// 2. sends it
+// 3. receives response
+// 4. parses it
+// 5. sends it to the handle
+// 6. prints it
+void Client::handleRequest(char option) {
+    ServerResponse response;
+    switch (option) {
+        case '1': {
+            ClientRequest cr = this->buildLoginRequest();
+            this->socket->send_msg(getRequestString(cr));
+            response = this->get_Response();
+            this->handleLoginResponse(response);
             break;
-        case 2:
-            cr = this->buildListRequest();
+        }
+        case '2': {
+            ClientRequest cr = this->buildSendRequest();
             break;
-        case 3:
-            cr = this->buildReadRequest();
+        }
+
+        case '3': {
+            ClientRequest cr = this->buildListRequest();
             break;
-        case 4:
-            cr = this->buildDeleteRequest();
+        }
+
+        case '4': {
+            ClientRequest cr = this->buildReadRequest();
             break;
-        case 5:
-            cr = this->buildQuitRequest();
+        }
+
+        case '5': {
+            ClientRequest cr = this->buildDeleteRequest();
+            break;
+        }
+
+        case 'q': {
+            ClientRequest cr = this->buildQuitRequest();
+            break;
+        }
         default:
-            std::cout << "Something went wrong here" << std::endl;
+            std::cout << "Something went wrong here." << std::endl;
     }
+    // now every response gets printed to the user
+    std::visit(UserServerResponsePrinter(std::cout), response);
 }
 
-Send Client::buildSendRequest() {
+std::string Client::getRequestString(ClientRequest &cr) const {
+    std::stringstream ss{};
+    std::visit(ClientRequestPrinter{ss}, cr);
+    return ss.str();
+}
+
+Send Client::buildSendRequest() const {
     return Send();
 }
 
-List Client::buildListRequest() {
+List Client::buildListRequest() const {
     return List();
 }
 
-Delete Client::buildDeleteRequest() {
-    return Delete();
+Delete Client::buildDeleteRequest() const {
+    std::string input;
+    std::cout << "Please enter which message you want to delete: " << std::flush;
+    std::cin >> input;
+    return {};
 }
 
-Quit Client::buildQuitRequest() {
+Quit Client::buildQuitRequest() const {
     return Quit();
 }
 
-Read Client::buildReadRequest() {
+Read Client::buildReadRequest() const {
     return Read();
 }
 
-Login Client::buildLoginRequest() {
+Login Client::buildLoginRequest() const {
     std::string username = this->getUsername();
     std::string password{};
     std::cout << "Password: ";
     std::cin >> password;
-    return Login {.username = username, .password = password};
+    return Login{.username = username, .password = password};
 }
 
-std::string Client::getUsername() {
+std::string Client::getUsername() const {
     std::string line{};
     while (line.empty() || line.size() > 8) {
         std::cout << "Username: ";
         std::getline(std::cin, line);
-        if(line.size() > 8) std::cout << "Invalid Input" << std::endl;
+        if (line.size() > 8) std::cout << "Invalid Input" << std::endl;
     }
     return line;
+}
+
+void Client::handleLoginResponse(ServerResponse response) {
+    if (std::holds_alternative<Success>(response)) {
+        this->loggedIn = true;
+    } else {
+        std::cout << "Login failed." << std::endl;
+    }
 }
 
 
