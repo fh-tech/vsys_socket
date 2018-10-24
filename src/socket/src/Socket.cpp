@@ -11,8 +11,7 @@
 Socket::Socket(int sockfd) : sockfd(sockfd) {}
 
 Socket::~Socket() {
-    std::cout << "fick dich du huso" << std::endl;
-  //  close(sockfd);
+    close(sockfd);
 }
 
 // returns - 1 on failure and on success number of characters sent
