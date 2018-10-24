@@ -14,6 +14,8 @@ void print_usage(char *program_name) {
 }
 
 int main(int argc, char *argv[]) {
+
+    /*
     int c;
     int error = 0;
     char *program_name = argv[0];
@@ -53,15 +55,18 @@ int main(int argc, char *argv[]) {
 
     // options were false
     if (error) {
-        print_usage(program_name);
+        //print_usage(program_name);
     }
 
     // false count of options
     if ((argc != 5 || optind != 5)) {
         fprintf(stderr, "false number of arguments\n");
-        print_usage(program_name);
+        //print_usage(program_name);
     }
-    MailServer mailServer("127.0.0.1", 10025);
+    */
+    MailServer mailServer = argc == 2
+                            ? MailServer{argv[0], atoi(argv[1])}
+                            : MailServer("127.0.0.1", 10025);
     mailServer.listen();
 
 }
