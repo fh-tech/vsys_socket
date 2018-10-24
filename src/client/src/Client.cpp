@@ -45,6 +45,7 @@ ServerResponse Client::get_Response() const {
 
 void Client::showOptions_preLogin() const {
     std::cout
+            << "\n"
             << "Choose option:\n"
             << "(1) LOGIN\n"
             << "(q) QUIT\n" << std::endl;
@@ -52,6 +53,7 @@ void Client::showOptions_preLogin() const {
 
 void Client::showOptions_postLogin() const {
     std::cout
+            << "\n"
             << "Choose option:\n"
             << "(2) SEND\n"
             << "(3) LIST\n"
