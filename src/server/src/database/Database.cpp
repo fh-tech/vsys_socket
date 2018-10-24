@@ -4,12 +4,13 @@
 
 #include "include/Database.h"
 
-Database::Database() : Database((get_home() + "/.mail.db").c_str()) {}
+Database::Database()
+        : Database((get_home() + "/.mail.db").c_str())
+{}
 
 Database::Database(const char * filename) : filename(filename) {
     open_database();
-    // if database does not exist or it is a in memory db
-    if (!db_exists() || filename == nullptr) create_tables();
+    setup_tables();
 }
 
 Database::~Database() {
@@ -41,8 +42,8 @@ bool Database::db_exists() const {
     return (stat(filename, &buffer) == 0);
 }
 
-void Database::create_tables() {
-    std::string sql = "CREATE TABLE MAIL("
+void Database::setup_tables() {
+    std::string sql = "CREATE TABLE IF NOT EXISTS MAIL("
                       "mail_ID   INTEGER PRIMARY KEY,"
                       "subject   TEXT    NOT NULL,"
                       "payload   TEXT    NULL,"
