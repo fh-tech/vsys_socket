@@ -7,6 +7,7 @@
 #include "include/ClientConnection.h"
 
 void MailServer::listen() {
+    std::cout << "Waiting for connections..." << std::endl;
     while(running){
         auto socket = serverSocket.listen_accept();
         next_id++;
