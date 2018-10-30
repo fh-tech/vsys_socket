@@ -41,7 +41,7 @@ public:
     Database db;
     std::string username = "";
     std::atomic<bool> keep_running = true;
-
+    std::unique_ptr<std::thread> thread;
 private:
     Socket client;
     ServerResponseGenerator sg;
@@ -56,7 +56,6 @@ private:
 //        closed,
 //    } status = waiting;
 //    std::array<char, 100> buf;
-    std::unique_ptr<std::thread> thread;
 };
 
 
