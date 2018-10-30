@@ -22,9 +22,9 @@
 class ClientConnection {
 public:
 
-    ClientConnection(size_t id, const Socket &socket, std::function<void()> deleter)
+    ClientConnection(size_t id, Socket &&socket, std::function<void()> deleter)
             : id(id)
-            , client(socket)
+            , client(std::move(socket))
             , deleter(std::move(deleter))
             , sg(this)
     {}
@@ -35,6 +35,8 @@ public:
     bool operator==(const ClientConnection& other) const;
     void handle_message(const std::variant<ClientRequest, const char*>& request);
     const Socket& getSocket() const;
+
+    ~ClientConnection();
 
     Database db;
     std::string username = "";
@@ -54,7 +56,7 @@ private:
 //        closed,
 //    } status = waiting;
 //    std::array<char, 100> buf;
-//    std::thread thread;
+    std::unique_ptr<std::thread> thread;
 };
 
 

@@ -11,7 +11,12 @@
 Socket::Socket(int sockfd) : sockfd(sockfd) {}
 
 Socket::~Socket() {
-    close(sockfd);
+    std::cout << "Socket dtor" << std::endl;
+
+    if(sockfd){
+        std:: cout << "Acutually destroying socket" << std::endl;
+        close(sockfd);
+    }
 }
 
 // returns - 1 on failure and on success number of characters sent
@@ -23,6 +28,7 @@ ssize_t Socket::send_msg(std::string message) {
 ssize_t Socket::receive(char *buf, size_t len) const {
     ssize_t rSize;
     if((rSize = recv(sockfd, buf, len, 0)) == -1) {
+        std:: cout << "rcv error" << std::endl;
         perror("recv: ");
         throw std::runtime_error("failed to receive message: ");
     } else {

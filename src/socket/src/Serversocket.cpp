@@ -33,8 +33,12 @@ void Serversocket::bind_sock() const {
     }
 }
 
-Socket Serversocket::listen_accept() const {
+void Serversocket::listen_socket() {
     listen(sockfd, backlog);
+}
+
+Socket Serversocket::accept_socket() const {
+
 
     struct sockaddr_in cli_addr{};
     int clilen = sizeof(cli_addr);

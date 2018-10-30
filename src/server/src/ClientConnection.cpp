@@ -7,8 +7,7 @@
 #include "include/ClientConnection.h"
 
 void ClientConnection::run() {
-    this->handle_connection();
-    deleter();
+    this->thread = std::make_unique<std::thread>([this](){this->handle_connection();});
 }
 
 void ClientConnection::handle_connection() {
@@ -21,6 +20,7 @@ void ClientConnection::handle_connection() {
             keep_running = false;
         }
     }
+    deleter();
 }
 
 std::variant<ClientRequest, const char *> ClientConnection::get_msg() {
@@ -54,4 +54,8 @@ void ClientConnection::handle_message(const std::variant<ClientRequest, const ch
 
 const Socket &ClientConnection::getSocket() const {
     return this->client;
+}
+
+ClientConnection::~ClientConnection() {
+    std::cout << "client conn dtor" << std::endl;
 }
