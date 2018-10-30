@@ -1,3 +1,8 @@
+find_package(Ldap)
+if (LDAP_INCLUDE_DIR)
+    include_directories(${LDAP_INCLUDE_DIR})
+endif()
+
 add_executable(server
         src/main.cpp
         src/include/ClientConnection.h
@@ -11,6 +16,7 @@ add_executable(server
         src/ServerResponseGenerator.cpp)
 
 target_link_libraries(server socket-lib protocol-lib)
+target_link_libraries(server -lldap -llber)
 
 ### TESTS
 add_executable(test_server
