@@ -14,6 +14,7 @@
 #include <ClientRequestPrinter.h>
 #include <ServerResponse.h>
 #include <ServerResponseParser.h>
+#include <optional>
 
 
 class Client {
@@ -29,19 +30,25 @@ private:
     void showOptions_postLogin() const;
     char getOption () const;
     void handleRequest(char option);
+    ServerResponse sendAndReceive() const;
     std::string getRequestString(ClientRequest &cr) const;
+    void listInbox() const;
+    void updateInbox();
+    msg_id getValidID() const;
 
     // building
     Send buildSendRequest() const;
     List buildListRequest() const;
-    Read buildReadRequest() const;
-    Delete buildDeleteRequest() const;
+    std::optional<Read> buildReadRequest() const;
+    std::optional<Delete> buildDeleteRequest() const;
     Quit buildQuitRequest() const;
     Login buildLoginRequest() const;
 
     // handling
     void handleLoginResponse(ServerResponse response);
     void handleListResponse(ServerResponse response);
+    void handleDeleteResponse(ServerResponse response, ClientRequest &clientRequest);
+    void handleSendResponse(ServerResponse response);
 
     std::string getUsername() const;
 

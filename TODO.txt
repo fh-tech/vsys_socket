@@ -1,0 +1,9 @@
+TODO: getpass bei pw eingeben
+TODO: READ: nachricht zu readen die es noch nicht gibt geht nicht
+TODO: DEL: immer success
+TODO: multiline pw eingabe
+TODO: Invalid Input am anfang (eig ein feature)
+TODO: ctrl+d ist weird
+
+TODO: multithread
+TODO: ldap

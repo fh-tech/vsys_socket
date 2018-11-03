@@ -15,6 +15,7 @@
 #include "Message.h"
 #include <vector>
 #include <Mail.h>
+#include <optional>
 
 class Database {
 public:
@@ -24,7 +25,7 @@ public:
     void save_msg(Mail_in mail_in);
     void delete_msg(uint16_t mail_id);
     std::vector<Mail_out> getMsgFor(std::string uid);
-    Mail_out getMsg(std::string mail_id);
+    std::optional<Mail_out> getMsg(std::string mail_id);
 
 private:
     sqlite3 *db;

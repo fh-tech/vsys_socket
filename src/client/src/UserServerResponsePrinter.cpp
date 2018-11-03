@@ -14,14 +14,14 @@ void UserServerResponsePrinter::operator()(Success const &l) {
 
 void UserServerResponsePrinter::operator()(Mail_list const &list) {
 
-    std::cout << "============ Inbox =============" << std::endl;
+    os << "============ Inbox =============" << std::endl;
     if(!list.mail_out.empty()){
         for(auto const& mail: list.mail_out){
-            std::cout << "[ " << mail.id << " ]" << "\t" << mail.subject << std::endl;
+            os << "[ " << mail.id << " ]" << "\t" << mail.subject << std::endl;
         }
-        std::cout << std::endl;
+        os << std::endl;
     } else {
-        std::cout << " empty." << std::endl;
+        os << "No messages." << std::endl;
     }
 }
 
