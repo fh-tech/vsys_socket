@@ -52,8 +52,13 @@ ServerResponse ServerResponseGenerator::operator()(const List &list) {
 
 ServerResponse ServerResponseGenerator::operator()(const Read &read) {
     try {
-        Mail_out m = this->clientConnection->db.getMsg(std::to_string(read.id));
-        return m;
+        std::optional<Mail_out> m = this->clientConnection->db.getMsg(std::to_string(read.id));
+        if(m) {
+            return m.value();
+        } else {
+            // throw and print so we see it in the terminal of the server
+            throw std::runtime_error("No Mail with this id found.");
+        }
     } catch (std::runtime_error &e) {
         std::cerr << e.what() << std::endl;
         return Error();

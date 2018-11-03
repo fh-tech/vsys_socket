@@ -2,6 +2,7 @@
 // Created by viktorl on 23.10.18.
 //
 
+#include <optional>
 #include "include/Client.h"
 #include "include/UserServerResponsePrinter.h"
 
@@ -94,47 +95,64 @@ void Client::handleRequest(char option) {
             this->socket->send_msg(getRequestString(cr));
             response = this->get_Response();
             this->handleLoginResponse(response);
+            std::visit(UserServerResponsePrinter(std::cout), response);
             break;
         }
         case '2': {
             ClientRequest cr = this->buildSendRequest();
             this->socket->send_msg(getRequestString(cr));
             response = this->get_Response();
+            this->handleSendResponse(response);
+            std::visit(UserServerResponsePrinter(std::cout), response);
             break;
         }
-
         case '3': {
             ClientRequest cr = this->buildListRequest();
             this->socket->send_msg(getRequestString(cr));
             response = this->get_Response();
             this->handleListResponse(response);
+            std::visit(UserServerResponsePrinter(std::cout), response);
             break;
         }
-
         case '4': {
-            ClientRequest cr = this->buildReadRequest();
-            this->socket->send_msg(getRequestString(cr));
-            response = this->get_Response();
+            // client side validation (check inbox)
+            std::optional<ClientRequest> cr = this->buildReadRequest();
+            if (cr) {
+                this->socket->send_msg(getRequestString(cr.value()));
+                response = this->get_Response();
+                std::visit(UserServerResponsePrinter(std::cout), response);
+            }
             break;
         }
-
         case '5': {
-            ClientRequest cr = this->buildDeleteRequest();
-            this->socket->send_msg(getRequestString(cr));
-            response = this->get_Response();
+            // client side validation (check inbox)
+            std::optional<ClientRequest> cr = this->buildDeleteRequest();
+            if (cr) {
+                this->socket->send_msg(getRequestString(cr.value()));
+                response = this->get_Response();
+                this->handleDeleteResponse(response, cr.value());
+                std::visit(UserServerResponsePrinter(std::cout), response);
+            }
             break;
         }
         case 'q': {
             ClientRequest cr = this->buildQuitRequest();
             this->socket->send_msg(getRequestString(cr));
             response = this->get_Response();
+            std::visit(UserServerResponsePrinter(std::cout), response);
             break;
         }
         default:
             std::cout << "Something went wrong here." << std::endl;
     }
-    // now every response gets printed to the user
-    std::visit(UserServerResponsePrinter(std::cout), response);
+}
+
+
+void Client::updateInbox() {
+    ClientRequest cr = this->buildListRequest();
+    this->socket->send_msg(getRequestString(cr));
+    ServerResponse response = this->get_Response();
+    this->handleListResponse(response);
 }
 
 std::string Client::getRequestString(ClientRequest &cr) const {
@@ -177,24 +195,49 @@ List Client::buildListRequest() const {
     return List();
 }
 
-Delete Client::buildDeleteRequest() const {
+std::optional<Delete> Client::buildDeleteRequest() const {
+    this->listInbox();
+    if (this->inbox.empty()) {
+        std::cout << "There are no messages to delete - maybe try to poll the server for new messages." << std::endl;
+        return std::nullopt;
+    } else {
+        std::cout << "Please enter which message you want to delete" << std::flush;
+        auto id = getValidID();
+        return Delete{.id = id};
+    }
+}
+
+std::optional<Read> Client::buildReadRequest() const {
+    this->listInbox();
+    if (this->inbox.empty()) {
+        std::cout << "You have no messages to read - maybe try to poll the server for new messages." << std::endl;
+        return std::nullopt;
+    } else {
+        std::cout << "Please enter which message you want to read: " << std::flush;
+        auto id = getValidID();
+        return Read{.id = id};
+    }
+}
+
+msg_id Client::getValidID() const {
     std::string input;
-    std::cout << "Please enter which message you want to delete: " << std::flush;
-    std::cin >> input;
-    auto id = static_cast<msg_id>(std::stol(input));
-    return Delete{.id = id};
+    bool valid = false;
+    do {
+        std::cout << ": ";
+        std::cin >> input;
+        for (MailDetail md : inbox) {
+            if (md.id == input) {
+                valid = true;
+                break;
+            }
+        }
+        if(!valid) std::cout << "Invalid Input." << std::endl;
+    } while (!valid);
+    return static_cast<msg_id>(std::stol(input));
 }
 
 Quit Client::buildQuitRequest() const {
     return Quit();
-}
-
-Read Client::buildReadRequest() const {
-    std::string input;
-    std::cout << "Please enter which message you want to read: " << std::flush;
-    std::cin >> input;
-    auto id = static_cast<msg_id>(std::stol(input));
-    return Read{.id = id};
 }
 
 Login Client::buildLoginRequest() const {
@@ -218,6 +261,7 @@ std::string Client::getUsername() const {
 void Client::handleLoginResponse(ServerResponse response) {
     if (std::holds_alternative<Success>(response)) {
         this->loggedIn = true;
+        this->handleRequest('3');
     } else {
         std::cout << "Login failed." << std::endl;
     }
@@ -228,5 +272,43 @@ void Client::handleListResponse(ServerResponse response) {
         this->inbox = list->mail_out;
     }
 }
+
+void Client::handleDeleteResponse(ServerResponse response, ClientRequest &clientRequest) {
+    if (auto req = std::get_if<Delete>(&clientRequest)) {
+        if (auto del = std::get_if<Success>(&response)) {
+            for (auto it = this->inbox.begin(); it != this->inbox.end(); it++) {
+                if (it->id == std::to_string(req->id)) {
+                    this->inbox.erase(it);
+                    break;
+                }
+            }
+        }
+    } else {
+        // if deleting from inbox cant be done fetch from server
+        updateInbox();
+    }
+}
+
+void Client::handleSendResponse(ServerResponse response) {
+    // if sending was success automatically update the inbox
+    if (auto send = std::get_if<Success>(&response)) {
+        this->updateInbox();
+    }
+}
+
+void Client::listInbox() const {
+    std::cout << "============ Inbox (send List to update) =============" << std::endl;
+    if (!inbox.empty()) {
+        for (auto const &mail: inbox) {
+            std::cout << "[ " << mail.id << " ]" << "\t" << mail.subject << std::endl;
+        }
+        std::cout << std::endl;
+    } else {
+        std::cout << " No messages." << std::endl;
+    }
+}
+
+
+
 
 

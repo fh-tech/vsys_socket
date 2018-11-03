@@ -75,13 +75,17 @@ void Database::delete_msg(uint16_t mail_id) {
     executeStatement(sql, nullptr, nullptr, errMsg, successMsg);
 }
 
-Mail_out Database::getMsg(std::string mail_id) {
+std::optional<Mail_out> Database::getMsg(std::string mail_id) {
     std::string sql = "SELECT * FROM MAIL WHERE mail_id = \'" + mail_id + "\';";
     std::string successMsg = "Retrieving message was successful.";
     std::string errMsg = "Failed to retrieve message. ";
     std::vector<Mail_out> result{};
     executeStatement(sql, getMsgsCallback, &result, errMsg, successMsg);
-    return result.at(0);
+    if(!result.empty()) {
+        return result.at(0);
+    } else {
+        return std::nullopt;
+    }
 }
 
 /**
