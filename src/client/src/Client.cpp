@@ -30,7 +30,8 @@ void Client::start() {
 ServerResponse Client::get_Response() const {
     ServerResponseParser parser{};
     std::string msg;
-    std::variant <ServerResponse ,const char*> result;
+    std::variant < ServerResponse,
+    const char*> result;
     do {
         msg += this->socket->read_line();
         result = parser.parse(msg);
@@ -64,16 +65,15 @@ void Client::showOptions_postLogin() const {
 
 char Client::getOption() const {
     std::string line;
-    char input;
+    char input{};
     while (true) {
         std::cout << ": " << std::flush;
-        std::getline(std::cin, line);
-        std::stringstream ss(line);
-        if (ss >> input) {
-            std::tuple range = this->loggedIn ? std::make_tuple('2', '5') : std::make_tuple('1', '5');
-            if ((input >= std::get<0>(range) && input <= std::get<1>(range)) || input == 'q') {
-                break;
-            }
+        std::cin >> input;
+        // to discard characters after the input we read
+        std::cin.ignore();
+        std::tuple range = this->loggedIn ? std::make_tuple('2', '5') : std::make_tuple('1', '1');
+        if ((input >= std::get<0>(range) && input <= std::get<1>(range)) || input == 'q') {
+            break;
         }
         std::cout << "Invalid Input" << std::endl;
     }
@@ -182,7 +182,7 @@ Delete Client::buildDeleteRequest() const {
     std::cout << "Please enter which message you want to delete: " << std::flush;
     std::cin >> input;
     auto id = static_cast<msg_id>(std::stol(input));
-    return Delete {.id = id};
+    return Delete{.id = id};
 }
 
 Quit Client::buildQuitRequest() const {
@@ -194,7 +194,7 @@ Read Client::buildReadRequest() const {
     std::cout << "Please enter which message you want to read: " << std::flush;
     std::cin >> input;
     auto id = static_cast<msg_id>(std::stol(input));
-    return Read {.id = id};
+    return Read{.id = id};
 }
 
 Login Client::buildLoginRequest() const {
@@ -224,7 +224,7 @@ void Client::handleLoginResponse(ServerResponse response) {
 }
 
 void Client::handleListResponse(ServerResponse response) {
-    if(auto list = std::get_if<Mail_list>(&response)){
+    if (auto list = std::get_if<Mail_list>(&response)) {
         this->inbox = list->mail_out;
     }
 }
