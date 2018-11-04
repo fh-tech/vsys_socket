@@ -15,6 +15,10 @@
 #include <ServerResponse.h>
 #include <ServerResponseParser.h>
 #include <optional>
+#include <termios.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string>
 
 
 class Client {
@@ -30,7 +34,9 @@ private:
     void showOptions_postLogin() const;
     char getOption () const;
     void handleRequest(char option);
-    ServerResponse sendAndReceive() const;
+    int getch() const;
+    std::string getpass(const char *prompt, bool show_asterisk) const;
+
     std::string getRequestString(ClientRequest &cr) const;
     void listInbox() const;
     void updateInbox();

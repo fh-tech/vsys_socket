@@ -231,7 +231,7 @@ msg_id Client::getValidID() const {
                 break;
             }
         }
-        if(!valid) std::cout << "Invalid Input." << std::endl;
+        if (!valid) std::cout << "Invalid Input." << std::endl;
     } while (!valid);
     return static_cast<msg_id>(std::stol(input));
 }
@@ -242,9 +242,9 @@ Quit Client::buildQuitRequest() const {
 
 Login Client::buildLoginRequest() const {
     std::string username = this->getUsername();
-    std::string password{};
-    std::cout << "Password: ";
-    std::cin >> password;
+    std::string password = this->getpass("Password: ", true);
+//    std::cout << "Password: ";
+//    std::cin >> password;
     return Login{.username = username, .password = password};
 }
 
@@ -256,6 +256,44 @@ std::string Client::getUsername() const {
         if (line.size() > 8) std::cout << "Invalid Input" << std::endl;
     }
     return line;
+}
+
+int Client::getch() const {
+    int ch;
+    struct termios t_old{}, t_new{};
+    tcgetattr(STDIN_FILENO, &t_old);
+    t_new = t_old;
+    t_new.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &t_new);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &t_old);
+    return ch;
+}
+
+std::string Client::getpass(const char *prompt, bool show_asterisk = true) const {
+    const char BACKSPACE = 127;
+    const char RETURN = 10;
+
+    std::string password;
+    unsigned char ch = 0;
+
+    std::cout << prompt << std::endl;
+
+    while ((ch = getch()) != RETURN) {
+        if (ch == BACKSPACE) {
+            if (password.length() != 0) {
+                if (show_asterisk)
+                    std::cout << "\b \b";
+                password.resize(password.length() - 1);
+            }
+        } else {
+            password += ch;
+            if (show_asterisk)
+                std::cout << '*';
+        }
+    }
+    std::cout << std::endl;
+    return password;
 }
 
 void Client::handleLoginResponse(ServerResponse response) {

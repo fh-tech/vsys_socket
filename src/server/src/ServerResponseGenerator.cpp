@@ -10,6 +10,7 @@
 
 // also hack with forward declaration
 #include "include/ClientConnection.h"
+#include "ldap/LDAPAuthenticator.h"
 
 ServerResponseGenerator::ServerResponseGenerator(ClientConnection *clientConnection) :clientConnection(clientConnection) {}
 
@@ -30,9 +31,12 @@ ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
 }
 
 ServerResponse ServerResponseGenerator::operator()(const Login &login) {
-    //TODO: LDAPÜ-sama
-    clientConnection->username = login.username;
-    return Success();
+    if(LDAPAuthenticator::authenticate(login.username, login.password)) {
+        clientConnection->username = login.username;
+        return Success();
+    } else {
+        return Error();
+    }
 }
 
 ServerResponse ServerResponseGenerator::operator()(const List &list) {

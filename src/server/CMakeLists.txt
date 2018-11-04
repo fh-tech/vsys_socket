@@ -13,7 +13,7 @@ add_executable(server
         src/database/include/Database.h
         src/database/include/Message.h
         src/include/ServerResponseGenerator.h
-        src/ServerResponseGenerator.cpp)
+        src/ServerResponseGenerator.cpp src/ldap/LDAPAuthenticator.h)
 
 target_link_libraries(server socket-lib protocol-lib)
 target_link_libraries(server -lldap -llber)
