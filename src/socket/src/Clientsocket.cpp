@@ -7,7 +7,6 @@
 #include "../include/Socket.h"
 
 ClientSocket::ClientSocket() {
-    std::cout << "client sock dtor" << std::endl;
 }
 
 

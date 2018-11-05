@@ -17,6 +17,7 @@ void ClientConnection::handle_connection() {
     while (keep_running) {
         try {
             std::variant < ClientRequest, const char*> msg = get_msg();
+            check_banned();
             handle_message(msg);
             check_banned();
         }catch(std::runtime_error& e){

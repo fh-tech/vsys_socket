@@ -4,7 +4,7 @@
 
 
 #include <gtest/gtest.h>
-#include <libnet.h>
+#include <arpa/inet.h>
 #include "../../src/database/include/Database.h"
 
 
