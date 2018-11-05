@@ -3,6 +3,7 @@
 //
 
 #include <optional>
+#include <functional>
 #include "include/Client.h"
 #include "include/UserServerResponsePrinter.h"
 
@@ -167,14 +168,33 @@ std::string Client::getRequestString(ClientRequest &cr) const {
     return ss.str();
 }
 
-Send Client::buildSendRequest() const {
-    std::string to;
-    std::cout << "Recipient: " << std::flush;
-    std::getline(std::cin, to);
+std::string get_validated_string(const std::string &promt, const std::function<bool(const std::string&)> &pred, const std::string& error){
+    std::string line;
+    while (line.empty() || !pred(line)) {
+        std::cout << promt;
+        std::getline(std::cin, line);
+        if (!pred(line)) std::cout << error << std::endl;
+    }
+    return line;
+}
 
-    std::string subject;
-    std::cout << "Subject: " << std::endl;
-    std::getline(std::cin, subject);
+std::string Client::getUsername() const {
+    return get_validated_string("Username: ", [](auto s){ return s.length() <= 8;}, "Username must be 8 characters or less");
+}
+
+
+std::string getRecipent() {
+    return get_validated_string("Recipient: ", [](auto s){ return s.length() <= 8;}, "Recipient must be 8 characters or less");
+}
+
+std::string getSubject() {
+    return get_validated_string("Subject: ", [](auto s){ return s.length() < 80;}, "Subject must be shorter than 80 characters");
+}
+
+Send Client::buildSendRequest() const {
+    std::string to = getRecipent();
+
+    std::string subject = getSubject();
 
     std::cout << "Write Msg: (ends with \\n.\\n)" << std::endl;
 
@@ -254,15 +274,7 @@ Login Client::buildLoginRequest() const {
     return Login{.username = username, .password = password};
 }
 
-std::string Client::getUsername() const {
-    std::string line{};
-    while (line.empty() || line.size() > 8) {
-        std::cout << "Username: ";
-        std::getline(std::cin, line);
-        if (line.size() > 8) std::cout << "Invalid Input" << std::endl;
-    }
-    return line;
-}
+
 
 int Client::getch() const {
     int ch;
