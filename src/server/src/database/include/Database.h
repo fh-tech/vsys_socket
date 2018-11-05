@@ -16,6 +16,7 @@
 #include <vector>
 #include <Mail.h>
 #include <optional>
+#include <ctime>
 
 class Database {
 public:
@@ -24,6 +25,11 @@ public:
     virtual ~Database();
     void save_msg(Mail_in mail_in);
     void delete_msg(uint16_t mail_id);
+
+    void ban_ip(uint32_t ip, std::time_t until);
+    bool is_banned(uint32_t ip);
+
+
     std::vector<Mail_out> getMsgFor(std::string uid);
     std::optional<Mail_out> getMsg(std::string mail_id);
 
@@ -41,6 +47,7 @@ private:
     inline bool db_exists() const;
 
     static int getMsgsCallback(void *, int, char **, char **);
+    static int is_banned_Callback(void *msg, int argc, char **argv, char **azColName);
 };
 
 

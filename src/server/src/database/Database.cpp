@@ -9,6 +9,7 @@ Database::Database()
 {}
 
 Database::Database(const char * filename) : filename(filename) {
+    if(!this->filename) this->filename = ":memory:";
     open_database();
     setup_tables();
 }
@@ -43,15 +44,21 @@ bool Database::db_exists() const {
 }
 
 void Database::setup_tables() {
-    std::string sql = "CREATE TABLE IF NOT EXISTS MAIL("
+    std::string mails_sql = "CREATE TABLE IF NOT EXISTS MAIL("
                       "mail_ID   INTEGER PRIMARY KEY,"
                       "subject   TEXT    NOT NULL,"
                       "payload   TEXT    NULL,"
                       "from_uid      TEXT    NOT NULL,"
                       "to_uid        TEXT    NOT NULL);";
+
+    std::string banlist_sql = "CREATE TABLE IF NOT EXISTS BANLIST("
+                              "ip       INTEGER PRIMARY KEY, "
+                              "until    INTEGER);";
+
     std::string errMsg = "Failed creating tables. ";
     std::string successMsg = "Tables were created successfully. ";
-    executeStatement(sql, nullptr, nullptr, errMsg, successMsg);
+    executeStatement(mails_sql, nullptr, nullptr, errMsg, successMsg);
+    executeStatement(banlist_sql, nullptr, nullptr, errMsg, successMsg);
 }
 
 void Database::save_msg(Mail_in mail_in) {
@@ -135,6 +142,35 @@ int Database::getMsgsCallback(void *msg, int argc, char **argv, char **azColName
     return 0;
 }
 
+void Database::ban_ip(uint32_t ip, std::time_t until) {
+    std::stringstream sql;
+    sql << "INSERT INTO banlist(ip, until) VALUES( " << ip << ", " << until  << ")"
+        << " ON CONFLICT(ip) DO UPDATE SET until = " << until;
+
+    std::string errMsg = "Failed to ban ip.";
+    std::string successMsg = "ip banned successfully.";
+    executeStatement(sql.str(), nullptr, nullptr, errMsg, successMsg);
+}
+
+bool Database::is_banned(uint32_t ip) {
+    std::time_t time = std::time(nullptr);
+    std::stringstream sql;
+    bool banned_result;
+    sql << "Select ip, until FROM banlist WHERE ip = " << ip << " AND " << "until > " << time;
+    std::string successMsg = "Retrieving data was successful.";
+    std::string errMsg = "Failed to retrieve data. ";
+
+    executeStatement(sql.str(), is_banned_Callback, &banned_result, errMsg, successMsg);
+
+    return banned_result;
+}
+
+int Database::is_banned_Callback(void *msg, int argc, char **argv, char **azColName) {
+    auto res = (bool*)msg;
+    std::cout << argv[0] << " :  " << argv[1] << std::endl;
+    *res = (argc == 2);
+    return 0;
+}
 
 
 

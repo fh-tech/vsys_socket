@@ -6,6 +6,9 @@
 #include "../include/Socket.h"
 #include <algorithm>
 #include <vector>
+#include <Socket.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 
 Socket::Socket(int sockfd) : sockfd(sockfd) {}
@@ -48,6 +51,13 @@ std::string Socket::read_line() const {
 
 int Socket::getSockfd() const {
     return sockfd;
+}
+
+uint32_t Socket::get_remote_ip() const {
+    struct sockaddr_in addr;
+    socklen_t addr_size = sizeof(addr);
+    int res = getpeername(sockfd, (struct sockaddr*) &addr, &addr_size);
+    return static_cast<uint32_t >(addr.sin_addr.s_addr);
 }
 
 

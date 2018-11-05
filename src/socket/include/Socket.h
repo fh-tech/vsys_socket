@@ -30,6 +30,9 @@ public:
 
     int getSockfd() const;
 
+    uint32_t get_remote_ip() const;
+
+
 private:
     int sockfd;
 };

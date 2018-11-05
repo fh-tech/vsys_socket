@@ -35,6 +35,9 @@ ServerResponse ServerResponseGenerator::operator()(const Login &login) {
         clientConnection->username = login.username;
         return Success();
     } else {
+         if(this->clientConnection->failed_login_count++ >= MAX_FAILED_LOGINS){
+            this->clientConnection->db.ban_ip(this->clientConnection->getSocket().get_remote_ip(), std::time(nullptr) + BAN_DURATION_IN_MIN * 60);
+         }
         return Error();
     }
 }

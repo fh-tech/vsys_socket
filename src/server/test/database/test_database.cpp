@@ -4,6 +4,7 @@
 
 
 #include <gtest/gtest.h>
+#include <libnet.h>
 #include "../../src/database/include/Database.h"
 
 
@@ -128,4 +129,36 @@ TEST(test_from_should_be_empty, test_db) {
     db.save_msg(msg);
     std::vector<Mail_out> msgs = db.getMsgFor(from);
     ASSERT_EQ(0, msgs.size());
+}
+
+TEST(test_ban_ip_future, test_db) {
+    Database db = Database(nullptr);
+    struct in_addr addr;
+    inet_aton("192.168.0.1", &addr);
+
+    db.ban_ip(addr.s_addr, time(nullptr) + 100);
+
+    ASSERT_TRUE(db.is_banned(addr.s_addr));
+
+}
+
+TEST(test_ban_ip_past, test_db) {
+    Database db = Database(nullptr);
+    struct in_addr addr;
+    inet_aton("192.168.0.1", &addr);
+
+    db.ban_ip(addr.s_addr, std::time(nullptr) - 100);
+
+    ASSERT_TRUE(!db.is_banned(addr.s_addr));
+
+}
+
+TEST(test_ban_ip_not_banned, test_db) {
+    Database db = Database(nullptr);
+    struct in_addr addr;
+    inet_aton("192.168.0.1", &addr);
+
+
+    ASSERT_TRUE(!db.is_banned(addr.s_addr));
+
 }

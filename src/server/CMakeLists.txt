@@ -20,18 +20,11 @@ target_link_libraries(server socket-lib protocol-lib)
 target_link_libraries(server -lldap -llber)
 
 ### TESTS
-add_executable(test_server
-        test/test_server.cpp
-        test/test_serverResponseGenerator.cpp
-        src/ServerResponseGenerator.cpp
-        src/include/ServerResponseGenerator.h
-        src/database/Database.cpp)
 
 add_executable(test_database
         test/database/test_database.cpp
         src/database/Database.cpp)
 
-target_link_libraries(test_server gtest_main -lldap -llber)
-target_link_libraries(test_server protocol-lib -lldap -llber)
+
 target_link_libraries(test_database gtest_main)
 target_link_libraries(test_database protocol-lib)

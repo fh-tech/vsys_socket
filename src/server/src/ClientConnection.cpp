@@ -12,10 +12,14 @@ void ClientConnection::run() {
 }
 
 void ClientConnection::handle_connection() {
+
+    check_banned();
+
     while (keep_running) {
         try {
             std::variant < ClientRequest, const char*> msg = get_msg();
             handle_message(msg);
+            check_banned();
         }catch(std::runtime_error& e){
             std::cerr << e.what() << std::endl;
             keep_running = false;
@@ -54,4 +58,11 @@ void ClientConnection::handle_message(const std::variant<ClientRequest, const ch
 
 const Socket &ClientConnection::getSocket() const {
     return this->client;
+}
+
+void ClientConnection::check_banned(){
+    if(this->db.is_banned(this->getSocket().get_remote_ip())){
+        std::cout << "Client with id:" << this->id  << " was banned closing conection...";
+        this->keep_running = false;
+    }
 }

@@ -18,6 +18,8 @@
 #include "../database/include/Database.h"
 #include "ServerResponseGenerator.h"
 
+#define MAX_FAILED_LOGINS 3
+#define BAN_DURATION_IN_MIN 1
 
 class ClientConnection {
 public:
@@ -39,11 +41,13 @@ public:
     Database db;
     std::string username = "";
     std::atomic<bool> keep_running = true;
-
+    size_t failed_login_count = 0;
 private:
+
+    void check_banned();
+
     Socket client;
     ServerResponseGenerator sg;
-
     size_t id;
     std::function<void()> deleter;
 

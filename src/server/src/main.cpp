@@ -83,8 +83,8 @@ int main(int argc, char *argv[]) {
         //print_usage(program_name);
     }
     */
-    MailServer mailServer = argc == 2
-                            ? MailServer{argv[0], atoi(argv[1])}
+    MailServer mailServer = argc == 3
+                            ? MailServer{argv[1], (uint16_t) atoi(argv[2])}
                             : MailServer("127.0.0.1", 10025);
     mailServer.listen();
 

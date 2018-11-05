@@ -70,8 +70,8 @@ int main(int argc, char *argv[]) {
         //print_usage(program_name);
     }
     */
-    Client client = argc == 2
-                    ? Client{atoi(argv[0]), argv[1]}
+    Client client = argc == 3
+                    ? Client{(uint16_t) atoi(argv[2]), argv[1]}
                     : Client(10025, "127.0.0.1");
 
     client.start();
