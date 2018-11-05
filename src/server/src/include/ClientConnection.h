@@ -24,9 +24,9 @@
 class ClientConnection {
 public:
 
-    ClientConnection(size_t id, const Socket &socket, std::function<void()> deleter)
+    ClientConnection(size_t id, Socket &&socket, std::function<void()> deleter)
             : id(id)
-            , client(socket)
+            , client(std::move(socket))
             , deleter(std::move(deleter))
             , sg(this)
     {}
@@ -42,6 +42,7 @@ public:
     std::string username = "";
     std::atomic<bool> keep_running = true;
     size_t failed_login_count = 0;
+    std::unique_ptr<std::thread> thread;
 private:
 
     void check_banned();
@@ -51,14 +52,6 @@ private:
     size_t id;
     std::function<void()> deleter;
 
-//    enum Status: char {
-//        waiting,
-//        parsing,
-//        processing,
-//        closed,
-//    } status = waiting;
-//    std::array<char, 100> buf;
-//    std::thread thread;
 };
 
 

@@ -14,7 +14,8 @@ public:
     Serversocket(std::string ip, uint16_t port, int backlog);
     Serversocket(uint16_t port, int backlog);
     virtual ~Serversocket();
-    Socket listen_accept() const;
+    void listen_socket();
+    Socket accept_socket() const;
 
 private:
     void bind_sock() const;

@@ -14,6 +14,11 @@ class Socket {
 public:
     explicit Socket(int sockfd);
 
+    Socket(Socket&& other){
+        sockfd = other.sockfd;
+        other.sockfd = 0;
+    }
+
     Socket()
     : sockfd(-1)
     {};
