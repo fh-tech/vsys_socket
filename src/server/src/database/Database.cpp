@@ -155,7 +155,7 @@ void Database::ban_ip(uint32_t ip, std::time_t until) {
 bool Database::is_banned(uint32_t ip) {
     std::time_t time = std::time(nullptr);
     std::stringstream sql;
-    bool banned_result;
+    bool banned_result = false;
     sql << "Select ip, until FROM banlist WHERE ip = " << ip << " AND " << "until > " << time;
     std::string successMsg = "Retrieving data was successful.";
     std::string errMsg = "Failed to retrieve data. ";
@@ -167,7 +167,6 @@ bool Database::is_banned(uint32_t ip) {
 
 int Database::is_banned_Callback(void *msg, int argc, char **argv, char **azColName) {
     auto res = (bool*)msg;
-    std::cout << argv[0] << " :  " << argv[1] << std::endl;
     *res = (argc == 2);
     return 0;
 }
