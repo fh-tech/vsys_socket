@@ -28,6 +28,7 @@ void Client::start() {
             if (option == 'q') exit(0);
         }
     } catch(std::runtime_error &e) {
+        // could have been solved with an addition to the protocol too (ERROR with message for example)
         std::cout << "Server terminated your session. You probably have been banned." << std::endl;
         exit(0);
     }
