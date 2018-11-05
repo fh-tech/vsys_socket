@@ -15,6 +15,9 @@
 ServerResponseGenerator::ServerResponseGenerator(ClientConnection *clientConnection) :clientConnection(clientConnection) {}
 
 ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
+
+    if(Send.subject.length() > 80 || Send.to.length() > 8) return Error();
+
     try {
         Mail_in m = {
                 .subject = Send.subject,
@@ -31,6 +34,9 @@ ServerResponse ServerResponseGenerator::operator()(const Send &Send) {
 }
 
 ServerResponse ServerResponseGenerator::operator()(const Login &login) {
+
+    if(login.username.length() > 8) return Error();
+
     if(LDAPAuthenticator::authenticate(login.username, login.password)) {
         clientConnection->username = login.username;
         return Success();
