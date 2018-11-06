@@ -1,1 +1,4 @@
-For details about the project just read the 'exercise_description.pdf' in doc/exercise_description.pdf
+## Protocol
+
+### Communication Protocol
+* see /doc/exercise_description.pdf

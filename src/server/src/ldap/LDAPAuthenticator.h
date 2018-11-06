@@ -10,7 +10,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ldap.h>
-
 #define LDAP_URI "ldap://ldap.technikum-wien.at:389"
 
 class LDAPAuthenticator {
