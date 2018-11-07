@@ -12,19 +12,24 @@ Client::Client(uint16_t port, const std::string &ip) : loggedIn(false) {
 }
 
 void Client::start() {
-    while (!loggedIn) {
-        showOptions_preLogin();
-        char option = getOption();
-        handleRequest(option);
-        if (option == 'q') exit(0);
+    try {
+        while (!loggedIn) {
+            showOptions_preLogin();
+            char option = getOption();
+            handleRequest(option);
+            if (option == 'q') exit(0);
+        }
+
+        while (true) {
+            showOptions_postLogin();
+            char option = getOption();
+            handleRequest(option);
+            if (option == 'q') exit(0);
+        }
+    } catch(std::runtime_error &e) {
+        std::cout << "Server terminated your session "
     }
 
-    while (true) {
-        showOptions_postLogin();
-        char option = getOption();
-        handleRequest(option);
-        if (option == 'q') exit(0);
-    }
 }
 
 

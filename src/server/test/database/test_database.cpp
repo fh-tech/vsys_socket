@@ -4,7 +4,7 @@
 
 
 #include <gtest/gtest.h>
-#include <arpa/inet.h>
+#include <arpa/inet.h> // inet_ntoa(), ...
 #include "../../src/database/include/Database.h"
 
 

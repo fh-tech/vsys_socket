@@ -6,9 +6,7 @@
 #include "../include/Clientsocket.h"
 #include "../include/Socket.h"
 
-ClientSocket::ClientSocket() {
-}
-
+ClientSocket::ClientSocket() {}
 
 std::unique_ptr<Socket> ClientSocket::connect_to(uint16_t port, std::string ip) {
 
