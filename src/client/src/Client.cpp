@@ -27,7 +27,8 @@ void Client::start() {
             if (option == 'q') exit(0);
         }
     } catch(std::runtime_error &e) {
-        std::cout << "Server terminated your session "
+        std::cout << "Server terminated your session. You probably have been banned." << std::endl;
+        exit(0);
     }
 
 }
